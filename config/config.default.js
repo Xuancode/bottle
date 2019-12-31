@@ -16,11 +16,39 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1577612349535_5569';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = [
+    'errorHandler'
+  ];
+
+  // 数据库配置
+  config.sequelize = {
+    username: "xpl",
+    password: "xplhandsome",
+    dialect: 'mysql',
+    host: '193.112.106.197',
+    port: 3306,
+    database: 'ps_please_dev',
+  };
+
+  // 只对 /api 前缀的url生效
+  config.errorHandler = {
+    match: '/api',
+  };
 
   // 开发过程关闭csrf校验
   config.security = {
     csrf: false
+  };
+
+  // 验证插件
+  config.validate = {
+    // convert: false,
+    // validateRoot: false,
+  };
+
+  // 启用file模式
+  config.multipart = {
+    mode: 'file',
   };
 
   // add your user config here

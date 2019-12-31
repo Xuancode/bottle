@@ -9,20 +9,20 @@ const createRule = {
     compare: 're-password',
   },
 };
-  
+ 
+// post
 exports.create = async ctx => {
 // 如果校验报错，会抛出异常
   ctx.validate(createRule);
   ctx.body = ctx.request.body;
 };
 
-class UserController extends Controller {
-  async info() {
-    const { ctx } = this;
-    ctx.body = {
-      name: `hello ${ctx.params.id}`,
-    };
-  }
-}
+// get
+exports.index = async ctx => {
+  console.log(ctx.query.id)
+  ctx.body = {
+    name: `hello ${ctx.query.id}`,
+  };
+};
 
-module.exports = UserController;
+// new

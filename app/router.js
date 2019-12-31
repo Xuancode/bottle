@@ -6,9 +6,16 @@
 module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
-  router.get('/user/:id', controller.user.info);
-  router.post('/user', app.controller.user);
-  router.get('/search', app.controller.search.index);
+  router.resources('/user', app.controller.user);
+  router.get('/search', app.middleware.uppercase(), app.controller.search.index); // 使用中间件
   router.post('/form', app.controller.form.post);
-  
+  router.redirect('/reto', '/user/9', 302); // 内部重定向
+  router.get('/reto2', app.controller.search.redirect); // 外部重定向
+
+  /**
+   * 正式开始
+   */
+  //登录
+  router.resources('/api/v1/session', app.controller.session);
+
 };
