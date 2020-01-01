@@ -10,6 +10,7 @@ module.exports = {
       age: INTEGER,
       created_at: DATE,
       updated_at: DATE,
+      openid: STRING(100)
     });
   },
   // 在执行数据库降级时调用的函数，删除 users 表
