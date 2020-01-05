@@ -1,21 +1,21 @@
 {
   "development": {
-    "username": "xpl",
-    "password": "xplhandsome",
+    "username": "root",
+    "password": "xpl",
     "database": "ps_please_dev",
-    "host": "193.112.106.197",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "",
+    "password": "123",
     "database": "ps_please_dev",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": null,
+    "password": "456",
     "database": "database_production",
     "host": "127.0.0.3",
     "dialect": "mysql"

@@ -22,10 +22,10 @@ module.exports = appInfo => {
 
   // 数据库配置
   config.sequelize = {
-    username: "xpl",
-    password: "xplhandsome",
+    username: "root",
+    password: "xpl",
     dialect: 'mysql',
-    host: '193.112.106.197',
+    host: '127.0.0.1',
     port: 3306,
     database: 'ps_please_dev',
   };
