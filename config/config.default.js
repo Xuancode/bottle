@@ -53,7 +53,8 @@ module.exports = appInfo => {
 
   // jwt验证
   config.jwt = {
-    secret: 'egg-api-jwt',
+    enable: true,
+    ignore: [ '/api/v1/session' ], // 哪些请求不需要认证
   };
 
   // 启用file模式

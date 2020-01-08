@@ -12,24 +12,21 @@ module.exports = options => {
         // 待完善统一错误编码
         ctx.throw(401, '未登录， 请先登录');
       }
-    } else { // 当前token值存在
+    } else {
       let decode;
       try {
         // 验证当前token
-        decode = JWT.verify(token, options.secret);
-        if (!decode || !decode.userName) {
-          ctx.throw(401, '没有权限，请登录');
-        }
-        if (Date.now() - decode.expire > 0) {
-          ctx.throw(401, 'Token已过期');
-        }
-        const user = await ctx.model.User.find({
-          userName: decode.userName,
-        });
-        if (user) {
+        // decode = JWT.verify(token, options.secret);
+        const verifyData = this.ctx.helper.resolveToken(token)
+        if (verifyData.uid) {
+          // 注意，还需要补验证
+          console.log(`有uid ${uid}`)
           await next();
         } else {
-          ctx.throw('401', '用户信息验证失败');
+          ctx.throw( 403, '登录状态已过期')
+        }
+        if (!decode || !decode.userName) {
+          ctx.throw(401, '没有权限，请登录');
         }
       } catch (e) {
         console.log(e);

@@ -38,7 +38,6 @@ class SessionService extends Service {
         name: name ? name : null,
         phone: phone ? phone : null
       })
-      console.log(userRes.id)
       uid = userRes.id
 
       await this.ctx.model.Wechat.create({
@@ -49,13 +48,16 @@ class SessionService extends Service {
     }
 
     // 后进行自定义用户体系的登录
-    this.ctx.service.session.login(uid)
-    return result;
+    const token = await this.ctx.service.session.login(uid)
+    return token;
   }
 
-  async login(wxcode) {
-    
-
+  async login(uid) {
+    const data = {
+      uid: uid
+    }
+    const token = await this.ctx.helper.initToken(data, 7200)
+    return token
   }
 }
 module.exports = SessionService;

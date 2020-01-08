@@ -22,7 +22,9 @@ class SessionController extends Controller {
     
 
     // console.log(userInfo)
-    ctx.body = userInfo
+    ctx.body = {
+      token: userInfo
+    }
   }
 };
 
