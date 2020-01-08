@@ -16,8 +16,12 @@ class SessionController extends Controller {
     console.log(ctx.request.body)
     ctx.validate(loginRule)
 
-    // 请求微信的session
-    const userInfo = await ctx.service.login.getSession(ctx.request.body.wxcode)
+    // 请求微信的session,维护wechat、user表的数据
+    const userInfo = await ctx.service.session.getSession(ctx.request.body.wxcode)
+    
+    
+
+    // console.log(userInfo)
     ctx.body = userInfo
   }
 };

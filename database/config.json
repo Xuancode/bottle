@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "xpl",
+    "username": "xpl",
+    "password": "xplhandsome",
     "database": "ps_please_dev",
-    "host": "127.0.0.1",
+    "host": "193.112.106.197",
     "dialect": "mysql"
   },
   "test": {

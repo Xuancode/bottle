@@ -18,4 +18,7 @@ module.exports = app => {
   //登录
   router.resources('/api/v1/session', app.controller.session);
 
+  // 获取list相关
+  router.resources('/api/v1/list', app.controller.list);
+
 };

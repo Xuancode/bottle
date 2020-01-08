@@ -4,49 +4,41 @@ module.exports = {
   // 在执行数据库升级时调用的函数，创建 users 表
   up: async (queryInterface, Sequelize) => {
     const { INTEGER, DATE, STRING } = Sequelize;
-    await queryInterface.createTable('lists', {
+    await queryInterface.createTable('comment', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      title: STRING(200),
-      src_img: STRING(200),
-      side_imgs: Array,
-      userId: {
+      content: STRING(200),
+      is_delete: INTEGER(1),  // 是否已删除，默认0，1为删除
+      // 判断是否存在回复关系
+      parents_id: {
         type: INTEGER, 
-        allowNull: false, 
+        allowNull: true
+      },
+      list_id: {
+        type: INTEGER, 
+        allowNull: false,
         references: {
-          modle: "Users",
+          model: "list",
           key: "id"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      editorId: {
+      user_id: {
         type: INTEGER, 
-        allowNull: false, 
+        allowNull: true, 
         references: {
-          modle: "Users",
+          model: "user",
           key: "id"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-
-      openid: STRING(100),
       created_at: DATE,
-      updated_at: DATE,
-      userId: {
-        type: INTEGER, 
-        allowNull: false, 
-        references: {
-          modle: "Users",
-          key: "id"
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE"
-      }
+      updated_at: DATE
     });
   },
   // 在执行数据库降级时调用的函数，删除 users 表
   down: async queryInterface => {
-    await queryInterface.dropTable('lists');
+    await queryInterface.dropTable('comment');
   },
 };

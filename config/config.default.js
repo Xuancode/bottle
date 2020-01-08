@@ -17,17 +17,22 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = [
-    'errorHandler'
+    'errorHandler',
+    'jwt'
   ];
 
   // 数据库配置
   config.sequelize = {
-    username: "root",
-    password: "xpl",
+    username: "xpl",
+    password: "xplhandsome",
     dialect: 'mysql',
-    host: '127.0.0.1',
+    host: '193.112.106.197',
     port: 3306,
     database: 'ps_please_dev',
+    define: {
+      freezeTableName: true,  // 禁止转换表明，防止自动加s
+      underscored: true,
+    }
   };
 
   // 只对 /api 前缀的url生效
@@ -44,6 +49,11 @@ module.exports = appInfo => {
   config.validate = {
     // convert: false,
     // validateRoot: false,
+  };
+
+  // jwt验证
+  config.jwt = {
+    secret: 'egg-api-jwt',
   };
 
   // 启用file模式
