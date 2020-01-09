@@ -13,20 +13,15 @@ module.exports = options => {
         ctx.throw(401, '未登录， 请先登录');
       }
     } else {
-      let decode;
       try {
-        // 验证当前token
-        // decode = JWT.verify(token, options.secret);
-        const verifyData = this.ctx.helper.resolveToken(token)
+        const verifyData = await ctx.helper.resolveToken(token.split(' ')[1])
         if (verifyData.uid) {
           // 注意，还需要补验证
-          console.log(`有uid ${uid}`)
           await next();
         } else {
-          ctx.throw( 403, '登录状态已过期')
-        }
-        if (!decode || !decode.userName) {
-          ctx.throw(401, '没有权限，请登录');
+          ctx.body = {message: '登录状态已过期', error_code: '40100'}
+          ctx.status = 401
+          // ctx.assert('ctx.state.user', 401, '登录状态已过期!');
         }
       } catch (e) {
         console.log(e);

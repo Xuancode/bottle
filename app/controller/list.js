@@ -9,12 +9,23 @@ const createRule = {
     compare: 're-password',
   },
 };
+
+const getRule = {
+  size: {
+    type: 'string',
+  },
+  page: {
+    type: 'string',
+  },
+  type: {
+    type: 'string'
+  }
+};
  
 // post
 exports.create = async ctx => {
 // 如果校验报错，会抛出异常
   console.log(ctx.request.body)
-  // ctx.validate(createRule);
   // app.model.User
 
   const { title, src_img, side_imgs, is_delete, user_id, editor_id} = ctx.request.body;
@@ -29,26 +40,16 @@ exports.create = async ctx => {
 
 // get
 exports.index = async ctx => {
-  // console.log(ctx.query.id)
-  const openid = await ctx.model.List.findAll({
-    // attributes: { exclude: ['updated_at'],  }, // 删除属性
-    include: [{
-        model: ctx.model.User,
-        // as: 'user'
-        // where: {name: "李宇春"}
-      },
-      {
-        model: ctx.model.User,
-        // as: 'user'
-        // where: {name: "李宇春"}
-      }
-    ],
-    where: { is_delete: 1},
-    order: [['updated_at', 'desc']],  // 排序方式，注意写法
-  })
+  // console.log(type, page, size)
+  // ctx.validate(getRule, ctx.query)
+  const {type, page, size} = ctx.query
+  
+  console.log(type, page, size)
+  
+  const list = await ctx.service.list.getList(type, page, size)
 
 
-  ctx.body = openid
+  ctx.body = list
 };
 
 // new

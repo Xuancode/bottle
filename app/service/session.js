@@ -49,6 +49,7 @@ class SessionService extends Service {
 
     // 后进行自定义用户体系的登录
     const token = await this.ctx.service.session.login(uid)
+    // console
     return token;
   }
 
