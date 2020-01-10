@@ -4,20 +4,23 @@
     "password": "xplhandsome",
     "database": "ps_please_dev",
     "host": "193.112.106.197",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   },
   "test": {
     "username": "root",
     "password": "123",
     "database": "ps_please_dev",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   },
   "production": {
     "username": "root",
     "password": "456",
     "database": "database_production",
     "host": "127.0.0.3",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+08:00"
   }
 }

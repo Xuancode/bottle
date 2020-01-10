@@ -21,7 +21,7 @@ module.exports = {
       const result = JWT.verify(token, cert) || {}
       console.log(99)
       console.log(result)
-
+      
       const { exp } = result
       const current = Math.floor(Date.now() / 1000)
       if (current <= exp) {

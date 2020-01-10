@@ -29,6 +29,7 @@ module.exports = appInfo => {
     host: '193.112.106.197',
     port: 3306,
     database: 'ps_please_dev',
+    timezone: '+08:00',
     define: {
       freezeTableName: true,  // 禁止转换表明，防止自动加s
       underscored: true,

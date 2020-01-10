@@ -13,32 +13,51 @@ class ListService extends Service {
     size = toInt(size)
     let ctx = this.ctx
     // 0为未完成， 1为推荐， 2为自我
-    switch(type){
-      case 0: {
-        console.log('飞法法')
-        const resData = await ctx.model.List.findAndCountAll({
-          attributes: ['id', 'title', 'src_img', 'updated_at'],
-          // where: { is_delete: 0, user_id: {$not: null}},
-          order: [['updated_at', 'DESC']],
-          limit: size,
-          offset: size * (page -1)
-        })
-        let pagination = {
-          total: resData.count,
-          count: resData.rows.length,
-          size: size,
-          page: page,
-          total_pages: parseInt((resData.count + size -1 ) / size) ,
-        }
-        return {data: resData.rows, meta: {pagination: pagination}}
+    if (type !== 2) {
+      const resData = await ctx.model.List.findAndCountAll({
+        attributes: ['id', 'title', 'src_img', 'side_imgs', 'updated_at'],
+        where: { is_delete: 0, editor_id: type ? !null : null},
+        include: {
+          model: ctx.model.User,
+          attributes: ['id', 'name']
+        },
+        order: [['updated_at', 'DESC']],
+        limit: size,
+        offset: size * (page -1)
+      })
+      let pagination = {
+        total: resData.count,
+        count: resData.rows.length,
+        size: size,
+        page: page,
+        total_pages: parseInt((resData.count + size -1 ) / size) ,
       }
-      case 1: {
-
+      return {data: resData.rows, meta: {pagination: pagination, type: type ? 1 : 0}}
+    } else {
+      const token = await ctx.helper.resolveToken(ctx.request.header.authorization.split(' ')[1])
+      const uid = token.uid
+      console.log(uid)
+      const resData = await ctx.model.List.findAndCountAll({
+        attributes: ['id', 'title', 'src_img', 'side_imgs', 'updated_at'],
+        where: { is_delete: 0, user_id: uid},
+        include: [
+          {model: ctx.model.User, attributes: ['id', 'name']},
+          {model: ctx.model.User, as: 'editor', attributes: ['id', 'name']},
+        ],
+        order: [['updated_at', 'DESC']],
+        limit: size,
+        offset: size * (page -1)
+      })
+      let pagination = {
+        total: resData.count,
+        count: resData.rows.length,
+        size: size,
+        page: page,
+        total_pages: parseInt((resData.count + size -1 ) / size) ,
       }
-      case 2: {
-
-      }
+      return {data: resData.rows, meta: {pagination: pagination, type: type ? 1 : 0}}
     }
+    
 
 
   }

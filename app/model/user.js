@@ -32,8 +32,8 @@ module.exports = app => {
   // console.log(User)
   // User.hasOne(app.model.Wechat)
   User.associate = function() {
-    app.model.User.hasOne(app.model.Wechat)
-    app.model.User.hasMany(app.model.List)
+    app.model.User.hasOne(app.model.Wechat, {constraints: false})
+    app.model.User.hasMany(app.model.List, {constraints: false})
     // app.model.Wechat.belongsTo(app.model.User, {as: 'user'})
     // app.model.Wechat.belongsTo(app.model.User)
   }

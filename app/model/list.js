@@ -29,7 +29,8 @@ module.exports = app => {
 
   List.associate = function() {
     app.model.List.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id'});
-    app.model.List.hasMany(app.model.Comment);
+    app.model.List.belongsTo(app.model.User, {foreignKey: 'editor_id' , as: 'editor', targetKey: 'id', constraints: false});
+    app.model.List.hasMany(app.model.Comment, {constraints: false});
   }
 
   return List;
