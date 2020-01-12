@@ -32,6 +32,7 @@ module.exports = app => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
     },
+    completed_img: "STRING",
     created_at: DATE,
     updated_at: DATE
   });

@@ -13,17 +13,18 @@ const loginRule = {
 class SessionController extends Controller {
   async create() {
     const { ctx } = this;
-    console.log(ctx.request.header)
+    // console.log(ctx.request.header)
     ctx.validate(loginRule)
 
     // 请求微信的session,维护wechat、user表的数据
     const userInfo = await ctx.service.session.getSession(ctx.request.body.wxcode)
-    
+    const qiNiuToken = ctx.helper.initQiniuToken()
     
 
     // console.log(userInfo)
     ctx.body = {
-      token: userInfo
+      token: userInfo,
+      qiNiuToken: qiNiuToken
     }
   }
 

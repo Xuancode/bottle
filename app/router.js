@@ -21,4 +21,9 @@ module.exports = app => {
   // 获取list相关
   router.resources('/api/v1/list', app.controller.list);
 
+  // 评论相关
+  router.resources('/api/v1/comment', app.controller.comment);
+
+
+
 };

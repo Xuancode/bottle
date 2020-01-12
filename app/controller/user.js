@@ -13,7 +13,7 @@ const createRule = {
 // post
 exports.create = async ctx => {
 // 如果校验报错，会抛出异常
-  console.log(ctx.request.body)
+  // console.log(ctx.request.body)
   // ctx.validate(createRule);
   // app.model.User
 

@@ -30,7 +30,7 @@ class SessionService extends Service {
     })
     if (res) {
       // 已存在，更新wecaht表
-      console.log(new Date())
+      // console.log(new Date())
       const wechatRes = await this.ctx.model.Wechat.update({session_key: session_key}, {where: {openid: openid}})
       uid = res.user_id
     } else {

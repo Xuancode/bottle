@@ -24,7 +24,7 @@ module.exports = options => {
           // ctx.assert('ctx.state.user', 401, '登录状态已过期!');
         }
       } catch (e) {
-        console.log(e);
+        console.log( '错误',e);
       }
     }
   };
