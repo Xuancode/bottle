@@ -24,6 +24,9 @@ module.exports = app => {
   // 评论相关
   router.resources('/api/v1/comment', app.controller.comment);
 
+  // 上传图片
+  router.resources('/api/v1/qiniu', app.controller.qiniu);
+
 
 
 };
