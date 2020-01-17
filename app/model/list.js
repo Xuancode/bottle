@@ -1,14 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING,TINYINT, INTEGER, DATE } = app.Sequelize;
 
   const List = app.model.define('list', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     title: STRING(200),
     src_img: STRING(200),
-    side_imgs: STRING(400),
-    is_delete: INTEGER(1),
+    side_imgs: STRING(1000),
+    is_delete: {
+      type: TINYINT(1),
+      defaultValue: false
+    },
     user_id: {
       type: INTEGER, 
       allowNull: false, 
@@ -21,7 +24,8 @@ module.exports = app => {
     },
     editor_id: {
       type: INTEGER, 
-      allowNull: true, 
+      allowNull: false, 
+      defaultValue: 0
     },
     created_at: DATE,
     updated_at: DATE

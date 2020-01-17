@@ -32,14 +32,17 @@ module.exports = app => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
     },
-    completed_img: "STRING",
+    completed_img: {
+      type: STRING,
+      defaultValue: ''
+    },
     created_at: DATE,
     updated_at: DATE
   });
 
   Comment.associate = function() {
     app.model.Comment.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id'})
-    app.model.Comment.belongsTo(app.model.List, {foreignKey: 'list_id' , targetKey: 'id'})
+    app.model.Comment.belongsTo(app.model.List, {foreignKey: 'list_id' , targetKey: 'id', constraints: false})
   }
 
   return Comment;

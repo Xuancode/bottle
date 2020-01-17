@@ -3,13 +3,16 @@
 module.exports = {
   // 在执行数据库升级时调用的函数，创建 users 表
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DATE, STRING } = Sequelize;
+    const { INTEGER, TINYINT, DATE, STRING } = Sequelize;
     await queryInterface.createTable('list', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       title: STRING(200),
       src_img: STRING(200),
-      side_imgs: STRING(400),
-      is_delete: INTEGER(1),
+      side_imgs: STRING(1000),
+      is_delete: {
+        type: TINYINT(1),
+        defaultValue: false
+      },
       user_id: {
         type: INTEGER, 
         allowNull: false, 
@@ -22,13 +25,8 @@ module.exports = {
       },
       editor_id: {
         type: INTEGER, 
-        allowNull: true, 
-        // references: {
-        //   model: "user",
-        //   key: "id"
-        // },
-        // onUpdate: "CASCADE",
-        // // onDelete: "SET_NULL"
+        allowNull: false, 
+        defaultValue: 0
       },
       created_at: DATE,
       updated_at: DATE

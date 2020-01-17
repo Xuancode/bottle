@@ -18,7 +18,8 @@ exports.create = async ctx => {
   // app.model.User
 
   const { name, age } = ctx.request.body;
-  const user = await ctx.model.User.create({ name });
+  
+  const user = await ctx.model.User.create({ name});
 
   // const { session_key, openid, user_id } = ctx.request.body;
   // const user = await ctx.model.Wechat.create({ session_key, openid, user_id });

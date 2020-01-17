@@ -12,8 +12,8 @@ exports.create = async ctx => {
   const token = await ctx.helper.resolveToken(ctx.request.header.authorization.split(' ')[1])
   const uid = token.uid
   ctx.validate(createRule, ctx.request.body);
-  const { title, src_img, side_imgs, is_delete, user_id, editor_id} = ctx.request.body;
-  const list = await ctx.model.List.create({ title, src_img, side_imgs, user_id: uid });
+  const { title, src_img, side_imgs} = ctx.request.body;
+  const list = await ctx.model.List.create({ title, src_img, side_imgs, user_id: uid, editor_id: 0 });
 
   // const { session_key, openid, user_id } = ctx.request.body;
   // const user = await ctx.model.Wechat.create({ session_key, openid, user_id });
