@@ -23,10 +23,15 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      editor_id: {
+      answer_times: {
         type: INTEGER, 
         allowNull: false, 
         defaultValue: 0
+      },
+      hots: {
+        type: INTEGER, 
+        allowNull: false, 
+        defaultValue: 100
       },
       created_at: DATE,
       updated_at: DATE

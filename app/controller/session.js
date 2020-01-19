@@ -20,12 +20,7 @@ class SessionController extends Controller {
     const userInfo = await ctx.service.session.getSession(ctx.request.body.wxcode)
     const qiNiuToken = ctx.helper.initQiniuToken()
     
-
-    // console.log(userInfo)
-    ctx.body = {
-      token: userInfo,
-      qiNiuToken: qiNiuToken
-    }
+    ctx.body = {...userInfo, qiNiuToken: qiNiuToken}
   }
 
   async index() {
@@ -35,7 +30,6 @@ class SessionController extends Controller {
     
     
 
-    // console.log(userInfo)
     ctx.body = {
       yes: 'yes'
     }

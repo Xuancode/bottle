@@ -6,11 +6,15 @@ module.exports = app => {
   const Comment = app.model.define('comment', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     content: STRING(200),
-    is_delete: INTEGER(1),  // 是否已删除，默认0，1为删除
+    is_delete: {
+      type: INTEGER(1), 
+      defaultValue: 0
+    }, // 是否已删除，默认0，1为删除
     // 判断是否存在回复关系
     parents_id: {
       type: INTEGER, 
-      allowNull: true
+      allowNull: false,
+      defaultValue: 0
     },
     list_id: {
       type: INTEGER, 
@@ -24,7 +28,7 @@ module.exports = app => {
     },
     user_id: {
       type: INTEGER, 
-      allowNull: true, 
+      allowNull: false, 
       references: {
           model: "user",
           key: "id"
@@ -32,9 +36,17 @@ module.exports = app => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
     },
-    completed_img: {
+    imgs: {
       type: STRING,
       defaultValue: ''
+    },
+    hots: {
+      type: INTEGER,
+      defaultValue: 100
+    },
+    is_editor: {
+      type: INTEGER(1),
+      defaultValue: 0,
     },
     created_at: DATE,
     updated_at: DATE

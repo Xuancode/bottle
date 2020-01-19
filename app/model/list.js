@@ -22,10 +22,15 @@ module.exports = app => {
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
     },
-    editor_id: {
+    answer_times: {
       type: INTEGER, 
       allowNull: false, 
       defaultValue: 0
+    },
+    hots: {
+      type: INTEGER, 
+      allowNull: false, 
+      defaultValue: 100
     },
     created_at: DATE,
     updated_at: DATE
@@ -33,7 +38,6 @@ module.exports = app => {
 
   List.associate = function() {
     app.model.List.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id'});
-    app.model.List.belongsTo(app.model.User, {foreignKey: 'editor_id' , as: 'editor', targetKey: 'id', constraints: false});
     app.model.List.hasMany(app.model.Comment, {constraints: false});
   }
 

@@ -22,25 +22,28 @@ class SessionService extends Service {
     var {session_key, openid} = result.data;
     var name = '', phone = ''
     var uid = ''
+    var user = {}
 
     // 查询wechat、user数据库是否存在该openid的用户，不存在就新建后执行登录，存在则更新信息后直接执行登录
     // openid = '7777777'
     let res = await this.ctx.model.Wechat.findOne({
       where: {openid}
     })
+    console.log(res)
     if (res) {
       // 已存在，更新wecaht表
       // console.log(new Date())
       const wechatRes = await this.ctx.model.Wechat.update({session_key: session_key}, {where: {openid: openid}})
-      uid = res.user_id
+      user = await this.ctx.model.User.findOne({where: {id: res.user_id}})
     } else {
       // 不存在，新建用户、wechat信息
       let nickName = 'ID' + Math.round(Math.random()*1000000)
       let userRes = await this.ctx.model.User.create({
         name: name ? name : nickName,
-        phone: phone ? phone : 0
+        phone: phone ? phone : '',
+        avatar: 'http://tmp/wx27d8d47c69b319c9.o6zAJs6qwYjcD2peZNWp1gl52NO0.TA4nkxQbZf2597eff96b8dcb35a2f032b04e5043f3d3.png'
       })
-      uid = userRes.id
+      user = userRes
 
       await this.ctx.model.Wechat.create({
         session_key: session_key,
@@ -48,11 +51,12 @@ class SessionService extends Service {
         user_id: userRes.id
       })
     }
-
+    uid = user.id
     // 后进行自定义用户体系的登录
     const token = await this.ctx.service.session.login(uid)
     // console
-    return token;
+    let data = {token: token,user_info: user}
+    return data;
   }
 
   async login(uid) {

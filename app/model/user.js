@@ -18,19 +18,30 @@
 
 
 module.exports = app => {
-  const { STRING, INTEGER, DATE } = app.Sequelize;
+  const { STRING, INTEGER, DATE, TINYINT } = app.Sequelize;
 
   const User = app.model.define('user', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING(30),
-    phone: INTEGER(11),
+    phone: {
+      type: INTEGER(11),
+      defaultValue: ''
+    },
     avatar: {
       type: STRING,
-      defaultValue: 'http://q3zie9bz3.bkt.clouddn.com/http://tmp/wx27d8d47c69b319c9.o6zAJs6qwYjcD2peZNWp1gl52NO0.TA4nkxQbZf2597eff96b8dcb35a2f032b04e5043f3d3.png'
+      defaultValue: ''
     },
     introduce: {
       type: STRING,
       defaultValue: '我有个朋友，求我p个图'
+    },
+    is_editor: {
+      type: TINYINT(1),
+      defaultValue: false
+    },
+    is_delete: {
+      type: TINYINT(1),
+      defaultValue: false
     },
     created_at: DATE,
     updated_at: DATE,

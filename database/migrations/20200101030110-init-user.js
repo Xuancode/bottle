@@ -3,7 +3,7 @@
 module.exports = {
   // 在执行数据库升级时调用的函数，创建 users 表
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, DATE, STRING } = Sequelize;
+    const { INTEGER, DATE, STRING, TINYINT } = Sequelize;
     await queryInterface.createTable('user', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       name: STRING(30),
@@ -11,13 +11,24 @@ module.exports = {
       updated_at: DATE,
       avatar: {
         type: STRING,
-        defaultValue: 'http://q3zie9bz3.bkt.clouddn.com/http://tmp/wx27d8d47c69b319c9.o6zAJs6qwYjcD2peZNWp1gl52NO0.TA4nkxQbZf2597eff96b8dcb35a2f032b04e5043f3d3.png'
+        defaultValue: ''
       },
       introduce: {
         type: STRING,
         defaultValue: '我有个朋友，求我p个图'
       },
-      phone: STRING(100)
+      is_editor: {
+        type: TINYINT(1),
+        defaultValue: false
+      },
+      is_delete: {
+        type: TINYINT(1),
+        defaultValue: false
+      },
+      phone: {
+        type: INTEGER(11),
+        defaultValue: ''
+      },
     });
   },
   // 在执行数据库降级时调用的函数，删除 users 表

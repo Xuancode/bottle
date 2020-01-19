@@ -7,7 +7,10 @@ module.exports = {
     await queryInterface.createTable('comment', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       content: STRING(200),
-      is_delete: INTEGER(1),  // 是否已删除，默认0，1为删除
+      is_delete: {
+        type: INTEGER(1), 
+        defaultValue: 0
+      }, // 是否已删除，默认0，1为删除
       // 判断是否存在回复关系
       parents_id: {
         type: INTEGER, 
@@ -32,6 +35,18 @@ module.exports = {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
+      },
+      imgs: {
+        type: STRING,
+        defaultValue: ''
+      },
+      hots: {
+        type: INTEGER,
+        defaultValue: 100
+      },
+      is_editor: {
+        type: INTEGER(1),
+        defaultValue: 0,
       },
       created_at: DATE,
       updated_at: DATE
