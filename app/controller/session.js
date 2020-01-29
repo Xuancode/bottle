@@ -26,13 +26,11 @@ class SessionController extends Controller {
   async index() {
     const { ctx } = this;
     // 请求微信的session,维护wechat、user表的数据
-    // const userInfo = await ctx.service.session.getSession(ctx.request.body.wxcode)
+    const userInfo = await ctx.service.session.getUser()
     
     
 
-    ctx.body = {
-      yes: 'yes'
-    }
+    ctx.body = userInfo
   }
 };
 

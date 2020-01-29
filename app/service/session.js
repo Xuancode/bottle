@@ -59,12 +59,27 @@ class SessionService extends Service {
     return data;
   }
 
+  /** 初始化token */
   async login(uid) {
     const data = {
       uid: uid
     }
     const token = await this.ctx.helper.initToken(data, 7200)
     return token
+  }
+
+  /**获取当前登录用户的信息 */
+  async getUser() {
+    const ctx = this.ctx 
+    let token = await ctx.helper.resolveToken(ctx.request.header.authorization.split(' ')[1])
+    let uid = token.uid
+
+    let res = await ctx.model.User.findOne({
+      // attributes: [],
+      where: {id: uid}
+    })
+    console.log(res)
+    return res
   }
 }
 module.exports = SessionService;
