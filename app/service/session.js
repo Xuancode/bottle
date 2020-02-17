@@ -29,7 +29,6 @@ class SessionService extends Service {
     let res = await this.ctx.model.Wechat.findOne({
       where: {openid}
     })
-    console.log(res)
     if (res) {
       // 已存在，更新wecaht表
       // console.log(new Date())
@@ -78,7 +77,6 @@ class SessionService extends Service {
       // attributes: [],
       where: {id: uid}
     })
-    console.log(res)
     return res
   }
 }
