@@ -11,11 +11,11 @@ module.exports = {
       created_at: DATE,
       updated_at: DATE,
       user_id: {
-        type: INTEGER, 
+        type: STRING(30), 
         allowNull: false, 
         references: {
           model: "user",
-          key: "id"
+          key: "user_id"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"

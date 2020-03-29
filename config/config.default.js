@@ -17,33 +17,20 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = [
+    'jwt',    // jwt验证
+    'httpLog',  // 日志增加请求rul信息
     'errorHandler',
-    'jwt'
   ];
 
-  // 数据库配置
-  config.sequelize = {
-    username: "xpl",
-    password: "xplhandsome",
-    dialect: 'mysql',
-    host: '193.112.106.197',
-    port: 3306,
-    database: 'ps_please_dev',
-    timezone: '+08:00',
-    define: {
-      freezeTableName: true,  // 禁止转换表明，防止自动加s
-      underscored: true,
-    }
+  // 从 `Node.js 性能平台` 获取对应的接入参数
+  config.alinode = {
+    appid: '84157',
+    secret: 'f8557da52f1d6d10afbae3d41156af9e2b0c0764',
   };
 
   // 只对 /api 前缀的url生效
   config.errorHandler = {
     match: '/api',
-  };
-
-  // 开发过程关闭csrf校验
-  config.security = {
-    csrf: false
   };
 
   // 验证插件
@@ -55,7 +42,7 @@ module.exports = appInfo => {
   // jwt验证
   config.jwt = {
     enable: true,
-    ignore: [ '/api/v1/session' ], // 哪些请求不需要认证
+    ignore: [ '/api/v1/session'], // 哪些请求不需要认证
   };
 
   // 启用file模式
@@ -66,6 +53,12 @@ module.exports = appInfo => {
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
+  };
+
+  // 微信配置
+  config.wechat = {
+    appid: 'wxe1eed4b0094c75ed',
+    secretid: '2d9dd090f267c5478a83227c784d4e30'
   };
 
   return {

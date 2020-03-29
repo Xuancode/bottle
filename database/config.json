@@ -2,7 +2,7 @@
   "development": {
     "username": "xpl",
     "password": "xplhandsome",
-    "database": "ps_please_dev",
+    "database": "main_data",
     "host": "193.112.106.197",
     "dialect": "mysql",
     "timezone": "+08:00"
@@ -10,7 +10,7 @@
   "test": {
     "username": "root",
     "password": "123",
-    "database": "ps_please_dev",
+    "database": "main_data1",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+08:00"

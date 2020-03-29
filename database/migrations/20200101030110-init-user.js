@@ -15,20 +15,25 @@ module.exports = {
       },
       introduce: {
         type: STRING,
-        defaultValue: '我有个朋友，求我p个图'
+        defaultValue: '这家伙很懒，没有添加自我介绍哦'
       },
-      is_editor: {
-        type: TINYINT(1),
-        defaultValue: false
-      },
+      // is_editor: {
+      //   type: TINYINT(1),
+      //   defaultValue: false
+      // },
       is_delete: {
         type: TINYINT(1),
         defaultValue: false
       },
       phone: {
         type: INTEGER(11),
-        defaultValue: ''
+        defaultValue: 0
       },
+      user_id: {
+        type: STRING(30),
+        unique: true,
+        allowNull: false
+      }
     });
   },
   // 在执行数据库降级时调用的函数，删除 users 表

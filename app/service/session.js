@@ -1,7 +1,6 @@
 const Service = require('egg').Service;
 
-const appid = 'wx27d8d47c69b319c9';
-const secretid = '3f27f2bb063daf2782fb754b5468c422';
+const short = require('short-uuid');
 
 function toInt(str) {
   if (typeof str === 'number') return str;
@@ -9,9 +8,12 @@ function toInt(str) {
   return parseInt(str, 10) || 0;
 }
 
+
 class SessionService extends Service {
   async getSession(wxcode) {
     // 请求小程序服务器拿到session
+    const appid = this.config.wechat.appid;
+    const secretid = this.config.wechat.secretid;
     const result = await this.ctx.curl(`https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secretid}&js_code=${wxcode}&grant_type=authorization_code
     `, { dataType: 'json' });
     // 报错处理
@@ -33,13 +35,14 @@ class SessionService extends Service {
       // 已存在，更新wecaht表
       // console.log(new Date())
       const wechatRes = await this.ctx.model.Wechat.update({session_key: session_key}, {where: {openid: openid}})
-      user = await this.ctx.model.User.findOne({where: {id: res.user_id}})
+      user = await this.ctx.model.User.findOne({where: {user_id: res.user_id}})
     } else {
       // 不存在，新建用户、wechat信息
       let nickName = 'ID' + Math.round(Math.random()*1000000)
       let userRes = await this.ctx.model.User.create({
         name: name ? name : nickName,
-        phone: phone ? phone : '',
+        phone: phone ? phone : 0,
+        user_id: short.generate(),   // 生成唯一id
         avatar: 'http://tmp/wx27d8d47c69b319c9.o6zAJs6qwYjcD2peZNWp1gl52NO0.TA4nkxQbZf2597eff96b8dcb35a2f032b04e5043f3d3.png'
       })
       user = userRes
@@ -47,10 +50,10 @@ class SessionService extends Service {
       await this.ctx.model.Wechat.create({
         session_key: session_key,
         openid: openid,
-        user_id: userRes.id
+        user_id: userRes.user_id
       })
     }
-    uid = user.id
+    uid = user.user_id
     // 后进行自定义用户体系的登录
     const token = await this.ctx.service.session.login(uid)
     // console
@@ -75,7 +78,7 @@ class SessionService extends Service {
 
     let res = await ctx.model.User.findOne({
       // attributes: [],
-      where: {id: uid}
+      where: {user_id: uid}
     })
     return res
   }

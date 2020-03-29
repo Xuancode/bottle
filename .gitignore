@@ -12,3 +12,6 @@ run/
 *.un~
 typings/
 .nyc_output/
+
+# 忽略配置文件
+config/

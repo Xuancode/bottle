@@ -53,8 +53,8 @@ module.exports = app => {
   });
 
   Comment.associate = function() {
-    app.model.Comment.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id'})
-    app.model.Comment.belongsTo(app.model.List, {foreignKey: 'list_id' , targetKey: 'id', constraints: false})
+    // app.model.Comment.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id'})
+    // app.model.Comment.belongsTo(app.model.List, {foreignKey: 'list_id' , targetKey: 'id', constraints: false})
   }
 
   return Comment;

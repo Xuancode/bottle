@@ -2,23 +2,25 @@
 const JWT = require('jsonwebtoken');
 const qiniu = require('qiniu');
 
+// console.log(app.config)
+
 // 七牛相关token
-var accessKey = '2TebehIpbNDlNkWtRf9CXssovv0o9YvAyoh1-mQX';
-var secretKey = '8kcCa5Ov8OLYH-I4tQKFtA-Ot907AJ8z9EbYOI09';
+var accessKey = '123';
+var secretKey = '123';
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
 module.exports = {
   async initToken(data, expires = 7200) {
     const exp = Math.floor(Date.now() / 1000) + expires
-    const cert = '9988xuanpinlang'
+    const cert = '123'
     // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_private_key.pem')) // 自己生成
-    const token = JWT.sign( data, cert, { expiresIn: 60 * 60 * 2 })
+    const token = JWT.sign( data, cert, { expiresIn: 60 * 60 * 24 * 7 })
     return token
   },
 
   async resolveToken(token) {
     // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_public_key.pem')) // 公钥，看后面生成方法
-    const cert = '9988xuanpinlang'
+    const cert = '123'
     var res = ''
     try {
       // const result = jwt.verify(token, cert, { algorithms: [ 'RS256' ] }) || {}

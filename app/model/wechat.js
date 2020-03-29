@@ -10,11 +10,11 @@ module.exports = app => {
     created_at: DATE,
     updated_at: DATE,
     user_id: {
-      type: INTEGER, 
+      type: STRING(30), 
       allowNull: false, 
       references: {
         model: "user",
-        key: "id"
+        key: "user_id"
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
@@ -22,7 +22,7 @@ module.exports = app => {
   });
 
   Wechat.associate = function() {
-    app.model.Wechat.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'id', as: 'user'})
+    app.model.Wechat.belongsTo(app.model.User, {foreignKey: 'user_id' , targetKey: 'user_id', as: 'user'})
     // app.model.Wechat.belongsTo(app.model.User, {as: 'user'})
     // app.model.Wechat.belongsTo(app.model.User)
   }

@@ -30,10 +30,13 @@ exports.create = async ctx => {
 
 // get
 exports.index = async ctx => {
-  const {type, page, size, list_id} = ctx.query
-  
-  const comments = await ctx.service.comment.getComment(type, page, size, list_id)
-
+  const {page, size, list_id} = ctx.query
+  let comments = {}
+  if (list_id) {
+    comments = await ctx.service.comment.getCommentByListID(page, size, list_id)
+  } else {
+    comments = await ctx.service.comment.getCommentByUID(page, size)
+  }
   ctx.body = comments
 };
 

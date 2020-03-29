@@ -3,6 +3,9 @@
 /**
  * @param {Egg.Application} app - egg application
  */
+
+// Access-Control-Allow-Origin：*
+
 module.exports = app => {
   const { router, controller } = app;
   router.get('/', controller.home.index);
@@ -18,8 +21,8 @@ module.exports = app => {
   //登录
   router.resources('/api/v1/session', app.controller.session);
 
-  // 获取list相关
-  router.resources('/api/v1/list', app.controller.list);
+  // 获取bottle相关
+  router.resources('/api/v1/bottle', app.controller.bottle);
 
   // 评论相关
   router.resources('/api/v1/comment', app.controller.comment);
