@@ -23,12 +23,16 @@ module.exports = app => {
 
   // 获取bottle相关
   router.resources('/api/v1/bottle', app.controller.bottle);
+  
+  /**有心影视 公众号 */
+  // token
+  router.resources('/api/v1/youxin', app.controller.youxin);
 
   // 评论相关
-  router.resources('/api/v1/comment', app.controller.comment);
+  // router.resources('/api/v1/comment', app.controller.comment);
 
   // 上传图片
-  router.resources('/api/v1/qiniu', app.controller.qiniu);
+  // router.resources('/api/v1/qiniu', app.controller.qiniu);
 
 
 
