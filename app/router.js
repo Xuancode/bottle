@@ -18,6 +18,11 @@ module.exports = app => {
   /**
    * 正式开始
    */
+  // 管理员
+  router.resources('/api/v1/login', app.controller.login);
+  router.resources('/api/v1/admin', app.controller.admin);
+  router.resources('/api/v1/permisson', app.controller.permission);
+  router.resources('/api/v1/role', app.controller.role);
   //登录
   router.resources('/api/v1/session', app.controller.session);
 
@@ -26,7 +31,22 @@ module.exports = app => {
   
   /**有心影视 公众号 */
   // token
-  router.resources('/api/v1/youxin', app.controller.youxin);
+  router.resources('/api/v1/youxin', app.controller.youxin)
+  router.resources('/api/v1/youxin/movie', app.controller.youxinMovie)
+  router.post('/api/v1/youxin/uploadExcle', app.controller.youxinMovie.uploadExcle)
+  router.get('/api/v1/youxin/movie/checkName', app.controller.youxinMovie.checkName)
+
+  // 临时的
+  router.resources('/api/v1/youxin/temp', app.controller.temp)
+  // router.get('/api/v1/youxin/temp/user_info', app.controller.temp.user_info)
+
+  /**
+   * 公众号相关
+   */
+
+  // 自动回复
+  router.resources('/api/v1/weChat/reply', app.controller.weChat.autoReply)
+  
 
   // 评论相关
   // router.resources('/api/v1/comment', app.controller.comment);
@@ -36,4 +56,4 @@ module.exports = app => {
 
 
 
-};
+}

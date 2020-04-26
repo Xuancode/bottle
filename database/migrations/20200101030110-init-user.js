@@ -26,7 +26,7 @@ module.exports = {
         defaultValue: false
       },
       phone: {
-        type: INTEGER(11),
+        type: STRING(15),
         defaultValue: 0
       },
       user_id: {

@@ -2,7 +2,7 @@
   "development": {
     "username": "xpl",
     "password": "xplhandsome",
-    "database": "main_data",
+    "database": "main_data_dev",
     "host": "193.112.106.197",
     "dialect": "mysql",
     "timezone": "+08:00"
@@ -10,16 +10,16 @@
   "test": {
     "username": "root",
     "password": "123",
-    "database": "main_data1",
+    "database": "main_data",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+08:00"
   },
   "production": {
     "username": "root",
-    "password": "456",
-    "database": "database_production",
-    "host": "127.0.0.3",
+    "password": "123",
+    "database": "main_data",
+    "host": "193.112.106.197",
     "dialect": "mysql",
     "timezone": "+08:00"
   }

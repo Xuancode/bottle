@@ -5,20 +5,16 @@ function toInt(str) {
   return parseInt(str, 10) || 0
 }
 
-class BottleService extends Service {
-  async getBottle(page, size) {
+class AdminService extends Service {
+  async getAdmin(page, size) {
     page = toInt(page)
     size = toInt(size)
     let ctx = this.ctx
-    // const Op = this.app.Sequelize.Op
-    const token = await ctx.helper.resolveToken(ctx.request.header.authorization.split(' ')[1])
-    const uid = token.uid
-
     const whereSql = [
-      { is_delete: 0, user_id: uid}
+      { is_delete: 0}
     ]
-    const resData = await ctx.model.Bottle.findAndCountAll({
-      attributes: ['id', 'text', 'number', 'created_at'],
+    const resData = await ctx.model.Admin.findAndCountAll({
+      // attributes: ['id', 'text', 'number', 'created_at'],
       where: whereSql[0],
       order: [['created_at']],
       limit: size,
@@ -35,4 +31,4 @@ class BottleService extends Service {
     return {data: resData.rows, meta: {pagination: pagination}}
   }
 }
-module.exports = BottleService;
+module.exports = AdminService;

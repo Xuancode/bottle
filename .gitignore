@@ -17,3 +17,4 @@ typings/
 config/
 app/._.DS_Store
 ._.DS_Store
+database/config.json

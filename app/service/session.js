@@ -66,7 +66,7 @@ class SessionService extends Service {
     const data = {
       uid: uid
     }
-    const token = await this.ctx.helper.initToken(data, 7200)
+    const token = await this.ctx.helper.initToken(data, 60 * 60 * 24 * 7)
     return token
   }
 

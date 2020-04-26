@@ -31,7 +31,6 @@ exports.index = async ctx => {
 // put
 exports.update = async ctx => {
   // 如果校验报错，会抛出异常
-  console.log(123)
   ctx.validate(createRule, ctx.request.body)
   const { text, number, id} = ctx.request.body
   var data = await ctx.model.Bottle.update(

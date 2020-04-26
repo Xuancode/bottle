@@ -7,7 +7,7 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING(30),
     phone: {
-      type: INTEGER(11),
+      type: STRING(15),
       defaultValue: ''
     },
     avatar: {

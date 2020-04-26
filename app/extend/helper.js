@@ -10,26 +10,19 @@ var secretKey = '123';
 var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
 module.exports = {
-  async initToken(data, expires = 7200) {
-    const exp = Math.floor(Date.now() / 1000) + expires
-    const cert = '123'
+  async initToken(data, expiresIn = 7200) {
+    const cert = this.config.jwt.cert
     // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_private_key.pem')) // 自己生成
-    const token = JWT.sign( data, cert, { expiresIn: 60 * 60 * 24 * 7 })
+    const token = JWT.sign( data, cert, { expiresIn: expiresIn })
     return token
   },
 
   async resolveToken(token) {
     // const cert = fs.readFileSync(path.join(__dirname, '../public/rsa_public_key.pem')) // 公钥，看后面生成方法
-    const cert = '123'
+    const cert = this.config.jwt.cert
     var res = ''
     try {
-      // const result = jwt.verify(token, cert, { algorithms: [ 'RS256' ] }) || {}
-      // console.log(token)
-      
       const result = JWT.verify(token, cert) || {}
-      // console.log(99)
-      // console.log(result)
-      
       const { exp } = result
       const current = Math.floor(Date.now() / 1000)
       if (current <= exp) {
@@ -49,6 +42,11 @@ module.exports = {
     return {msg: "success!", errCode: 0}
   },
 
+  // http返回便捷
+  jsonError() {
+    return {msg: "err!", errCode: 1}
+  },
+
   // 七牛云token生成
   initQiniuToken() {
     //自定义凭证有效期（示例2小时，expires单位为秒，为上传凭证的有效时间）
@@ -59,5 +57,27 @@ module.exports = {
     var putPolicy = new qiniu.rs.PutPolicy(options);
     var uploadToken=putPolicy.uploadToken(mac);
     return uploadToken
+  },
+
+  /** 过滤obj对象中key值的为undefined的key */
+  fliterUndefinedParams(tempObj) {
+    let obj = {}
+    for (let key in tempObj) {
+      if (tempObj[key] != undefined) {
+        obj[key] = tempObj[key]
+      }
+    }
+    return obj
+  },
+  
+  /** 过滤obj对象中key值的为undefined的key */
+  fliterFalseParams(tempObj) {
+    let obj = {}
+    for (let key in tempObj) {
+      if (tempObj[key]) {
+        obj[key] = tempObj[key]
+      }
+    }
+    return obj
   }
 }

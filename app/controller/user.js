@@ -47,18 +47,7 @@ exports.create = async ctx => {
 exports.index = async ctx => {
   // console.log(ctx.query.id)
   const openid = await ctx.model.User.findAll({
-    // attributes: [ 'id', 'user_id' ], // 指定属性
-    // attributes: { exclude: ['updated_at'],  }, // 删除属性
     include: [
-      // {
-      //   model: ctx.model.Wechat,
-      //   // as: 'wechat'
-      //   // where: {name: "李宇春"}
-      //   // where: { name: { [Op.like]: '%9%' } }
-      // },
-      // {
-      //   model: ctx.model.List,
-      // }
       {
         all: true
       }

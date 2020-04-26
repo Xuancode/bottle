@@ -7,7 +7,7 @@ const loginRule = {
   wxcode: {
     type: 'string',
   }
-};
+}
 
 class SessionController extends Controller {
   async create() {
