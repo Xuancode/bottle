@@ -22,8 +22,9 @@ class TempController extends Controller {
     let msgType = jsonObj.xml.MsgType
     let content = jsonObj.xml.Content
 
+    console.log(ctx.request.body)
+    ctx.logger.info('XML_request_body: %j', ctx.request.body)
 
-    jsonObj.heheda = 666
     let replyData = {
       xml: {
         ToUserName: `<![CDATA[${user}]]>`,
