@@ -7,8 +7,8 @@ class permissionController extends Controller {
     const { ctx } = this
     // ctx.validate(loginRule)
     // link", "pass_code", "admin_id", "introduction
-    const {label, url, parent_id} = ctx.request.body
-    let tempObj = {label, url, parent_id}
+    const {label, router, url, parent_id} = ctx.request.body
+    let tempObj = {label, router, url, parent_id}
     let obj = ctx.helper.fliterFalseParams(tempObj)
     
     const res = await ctx.model.Permission.create(obj)
@@ -19,17 +19,17 @@ class permissionController extends Controller {
 
   async index() {
     const { ctx } = this
-    const { type } = ctx.query
+    const { admin_id } = ctx.query
     
-    const res = await ctx.service.permission.getMenu(type)
+    const res = await ctx.service.permission.getMenu(admin_id)
     ctx.status = 200
     ctx.body = {msg: 'success!', code: 20000, ...res}
   }
 
   async update() {
     const { ctx } = this
-    let {id, label, url, parent_id} = ctx.request.body
-    let tempObj = {label, url}
+    let {id, label, router, url, parent_id} = ctx.request.body
+    let tempObj = {label, url, router}
     parent_id = parent_id ? parent_id : null
     let obj = ctx.helper.fliterUndefinedParams(tempObj)
     const res = await ctx.model.Permission.update(

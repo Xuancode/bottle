@@ -10,7 +10,7 @@ const createRule = {
   },
   idArr: {
     type: 'array',
-    required: true
+    required: false
   },
   desc: {
     type: 'string',
@@ -34,7 +34,7 @@ const updateRule = {
   },
   idArr: {
     type: 'array',
-    required: true
+    required: false
   },
   desc: {
     type: 'string',
@@ -53,25 +53,14 @@ class roleController extends Controller {
     let {label, idArr, desc} = ctx.request.body
     desc = desc ? desc : ''
     const res = await ctx.service.role.createRole(label, idArr, desc)
-    const data = {
-      adminName: label,
-      totalPermission: res.length
-    }
     ctx.status = 201
-    ctx.body = {msg: 'success!', data, code: 20000}
+    ctx.body = {msg: 'success!', data: res, code: 20000}
   }
 
   async index() {
     const { ctx } = this
     const { labelStr } = ctx.query
     var res = await ctx.service.role.getPermissionByRole(labelStr)
-    // if (labelStr) {
-    //   const labelArr = labelStr.split(',')
-      
-    // } else {
-    //   var res = await ctx.service.role.getPermissionByRole(labelArr) // 没有区分的必要
-    // }
-
     ctx.status = 200
     ctx.body = {msg: 'success!', code: 20000, data: res}
   }

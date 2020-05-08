@@ -11,22 +11,16 @@ const loginRule = {
   }
 };
 
-class YouxinController extends Controller {
+class weChatReplyController extends Controller {
   async create() {
-    // const { ctx } = this;
-    // // ctx.validate(loginRule)
 
-    // // 请求微信的session,维护wechat、user表的数据
-    // const userInfo = await ctx.service.session.getSession(ctx.request.body.wxcode)
-    
-    // ctx.body = {...userInfo}
   }
 
   async index() {
     const { ctx } = this
     const {signature, timestamp, nonce, echostr} = ctx.query
     ctx.logger.info('request_query: %j', ctx.query)
-    const token = this.config.youxin.token;
+    const token = this.config.youxin.token
     let Arr = [token, timestamp, nonce]
     Arr.sort()
     let str = '' + Arr[0] + Arr[1] + Arr[2]
@@ -39,4 +33,4 @@ class YouxinController extends Controller {
   }
 };
 
-module.exports = YouxinController;
+module.exports = weChatReplyController

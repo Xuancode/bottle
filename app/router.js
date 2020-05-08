@@ -31,7 +31,7 @@ module.exports = app => {
   
   /**有心影视 公众号 */
   // token
-  router.resources('/api/v1/youxin', app.controller.youxin)
+  router.resources('/api/v1/weChatReply', app.controller.weChatReply)
   router.resources('/api/v1/youxin/movie', app.controller.youxinMovie)
   router.post('/api/v1/youxin/uploadExcle', app.controller.youxinMovie.uploadExcle)
   router.get('/api/v1/youxin/movie/checkName', app.controller.youxinMovie.checkName)

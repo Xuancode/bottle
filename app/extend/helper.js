@@ -79,5 +79,27 @@ module.exports = {
       }
     }
     return obj
+  },
+  /** 生成admin_id */
+  initAdminID(tempObj) {
+    let obj = {}
+    for (let key in tempObj) {
+      if (tempObj[key]) {
+        obj[key] = tempObj[key]
+      }
+    }
+    return obj
+  },
+  /** 去重 */
+  removeRepeat(arr, key){
+    let result = [];
+    let temp = {}
+    arr.forEach(item=>{
+      if(!temp[item[key]]){
+        result.push(item)
+        temp[item[key]] = true
+      }
+    })
+    return result
   }
 }

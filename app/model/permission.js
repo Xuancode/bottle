@@ -9,6 +9,10 @@ module.exports = app => {
       type: STRING(20),
       allowNull: false
     },
+    router: {
+      type: STRING(20),
+      allowNull: true
+    },
     url: {
       type: STRING(30),
       allowNull: true,

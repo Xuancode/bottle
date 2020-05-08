@@ -8,7 +8,8 @@ module.exports = app => {
     name: STRING(30),
     user_name: {
       type: STRING(20),
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     pass_word: {
       type: STRING(20),
@@ -32,17 +33,13 @@ module.exports = app => {
       type: STRING(30),
       unique: true,
       allowNull: false
-    },
-    permission: {
-      type: STRING,
-      allowNull: true
     }
   });
 
   Admin.associate = function() {
     app.model.Admin.hasMany(app.model.Movie, {constraints: false, foreignKey: 'admin_id' , targetKey: 'admin_id'}),
-    app.model.Admin.belongsToMany(app.model.Item, { through: 'admin_item', foreignKey: 'admin_id' }),
-    app.model.Admin.belongsToMany(app.model.Role, { through: 'admin_role', foreignKey: 'admin_id' })
+    // app.model.Admin.belongsToMany(app.model.Item, { through: 'admin_item', foreignKey: 'admin_id' }),
+    app.model.Admin.belongsToMany(app.model.Role, {through: 'admin_role', foreignKey: 'admin_id' }) // 此处一直加不上别名，加上后多对多关系就失效，未知原因
   }
   return Admin
 }

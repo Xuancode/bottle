@@ -9,7 +9,8 @@ module.exports = {
       name: STRING(30),
       user_name: {
         type: STRING(20),
-        allowNull: false
+        allowNull: false,
+        unique: true,
       },
       pass_word: {
         type: STRING(20),
@@ -31,10 +32,6 @@ module.exports = {
         type: STRING(30),
         unique: true,
         allowNull: false
-      },
-      permission: {
-        type: STRING,
-        allowNull: true
       },
       created_at: DATE,
       updated_at: DATE

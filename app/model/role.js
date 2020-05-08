@@ -26,7 +26,7 @@ module.exports = app => {
 
   Role.associate = function() {
     app.model.Role.belongsToMany(app.model.Permission, { through: 'role_permission', foreignKey: 'role_id'}),
-    app.model.Role.belongsToMany(app.model.Admin, { through: 'admin_role', foreignKey: 'role_id'})
+    app.model.Role.belongsToMany(app.model.Admin, { as: 'roles', through: 'admin_role', foreignKey: 'role_id' })
   }
 
   return Role;
