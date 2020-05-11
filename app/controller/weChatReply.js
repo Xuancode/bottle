@@ -25,7 +25,7 @@ function decryptXML(obj){
   xml2js.parseString(this_text.substring(20,this_text.lastIndexOf(">")+1), function(err, result){
     if(err) throw err;
     xmlText = result;
-  });
+  })
   return {
     noncestr:this_text.substring(0,16),
     msg_len:this_text.substring(16,20),
@@ -67,7 +67,18 @@ function getReplyXml(jsonObj, ctx) {
   // cipher.setAutoPadding(false); // 取消自动填充
   let finalCipher = cipher.update(finalMsg, "binary", 'base64') + cipher.final('base64')
 
-  finalCipher = Buffer.from(finalCipher).toString('base64')
+  // finalCipher = Buffer.from(finalCipher).toString('base64')
+
+  // 尝试解密自己，验证
+  console.log('失败的长这样: ', finalCipher)
+  let data = decryptXML({
+    AESKey: AESKey,
+    text: finalCipher
+  })
+
+  console.log(data)
+
+
 
   // 生成 MsgSignature
   let Arr = [ctx.app.config.youxin.token, ctx.query.timestamp, ctx.query.nonce, finalCipher] // 密文
@@ -86,7 +97,7 @@ function getReplyXml(jsonObj, ctx) {
 
   var xmlBuilder = new JSON2XML()
   finalXml = xmlBuilder.parse(finalXml)
-	return finalXml
+	return data
 }
 
 /**
@@ -176,6 +187,8 @@ class weChatReplyController extends Controller {
       text: jsonObj.xml.Encrypt
     })
 
+    console.log('合法的长这样: ', jsonObj.xml.Encrypt)
+
     const replyMsg = getReplyXml(data.msg.xml, ctx)
 
     ctx.body = replyMsg
@@ -198,6 +211,6 @@ class weChatReplyController extends Controller {
         ctx.body = '错误'
     }
   }
-};
+}
 
 module.exports = weChatReplyController
