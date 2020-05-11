@@ -97,7 +97,7 @@ function getReplyXml(jsonObj, ctx) {
 
   var xmlBuilder = new JSON2XML()
   finalXml = xmlBuilder.parse(finalXml)
-	return data
+	return finalXml
 }
 
 /**
