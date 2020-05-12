@@ -200,7 +200,8 @@ class weChatReplyController extends Controller {
       }
     }
 
-
+    builder = new JSON2XML()
+    finalXml = builder.parse(finalXml)
 
     // var builder = new JSON2XML()
     // replyMsg = builder.parse(replyMsg)
