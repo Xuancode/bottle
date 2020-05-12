@@ -43,7 +43,6 @@ class WxCrypt {
   * @return String msg_content 返回消息内容（xml字符串）
   */
   decrypt(text) {
-    let plain_text;
     let decipher = crypto.Decipheriv('aes-256-cbc', this.aesKey, this.IV)
     // crypto.Decipheriv == crypto.createDecipheriv 两个方法是一样的  
     decipher.setAutoPadding(false);//重要

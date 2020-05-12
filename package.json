@@ -7,7 +7,6 @@
     "declarations": true
   },
   "dependencies": {
-    "crypto-js": "^4.0.0",
     "egg": "^2.15.1",
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.2.3",
@@ -22,8 +21,7 @@
     "qiniu": "^7.3.0",
     "short-uuid": "^3.1.1",
     "uuid": "^3.3.3",
-    "xlsx": "^0.15.6",
-    "xml2js": "^0.4.23"
+    "xlsx": "^0.15.6"
   },
   "devDependencies": {
     "autod": "^3.0.1",

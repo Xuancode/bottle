@@ -80,15 +80,10 @@ module.exports = {
     }
     return obj
   },
-  /** 生成admin_id */
-  initAdminID(tempObj) {
-    let obj = {}
-    for (let key in tempObj) {
-      if (tempObj[key]) {
-        obj[key] = tempObj[key]
-      }
-    }
-    return obj
+  /** 生成item_id */
+  createItemID() {
+    let time = new Date()
+    return time.getTime() - 1570000000000 // 减去前三位，再在首位+1作为itemID
   },
   /** 去重 */
   removeRepeat(arr, key){

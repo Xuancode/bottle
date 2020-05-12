@@ -15,6 +15,7 @@ module.exports = app => {
   router.redirect('/reto', '/user/9', 302); // 内部重定向
   router.get('/reto2', app.controller.search.redirect); // 外部重定向
 
+
   /**
    * 正式开始
    */
@@ -23,6 +24,10 @@ module.exports = app => {
   router.resources('/api/v1/admin', app.controller.admin);
   router.resources('/api/v1/permisson', app.controller.permission);
   router.resources('/api/v1/role', app.controller.role);
+
+  // 项目
+  router.resources('/api/v1/item', app.controller.item);
+
   //登录
   router.resources('/api/v1/session', app.controller.session);
 
