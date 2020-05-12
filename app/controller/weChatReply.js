@@ -173,14 +173,13 @@ class weChatReplyController extends Controller {
     let msgJS = Parser.parse(xml)
     let replyMsg = {
       xml: {
-        ToUserName: `<![CDATA[${msgJS.FromUserName}]]>`,
-        FromUserName: `<![CDATA[${msgJS.ToUserName}]]>`,
+        ToUserName: `<![CDATA[${msgJS.xml.FromUserName}]]>`,
+        FromUserName: `<![CDATA[${msgJS.xml.ToUserName}]]>`,
         CreateTime: new Date().getTime(),
         MsgType: `<![CDATA[${'text'}]]>`,
         Content: `<![CDATA[${'你好，我回复你了哦'}]]>`
       }
     }
-
     let builder = new JSON2XML()
     replyMsg = builder.parse(replyMsg)
     replyMsg = wxCrypt.encrypt(replyMsg)
@@ -202,10 +201,6 @@ class weChatReplyController extends Controller {
 
     builder = new JSON2XML()
     finalXml = builder.parse(finalXml)
-
-    // var builder = new JSON2XML()
-    // replyMsg = builder.parse(replyMsg)
-
 
     ctx.body = finalXml
     
