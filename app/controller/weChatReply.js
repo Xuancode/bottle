@@ -6,6 +6,7 @@ const crypto = require('crypto')
 var Parser = require('fast-xml-parser')
 var JSON2XML = require("fast-xml-parser").j2xParser
 const xml2js = require('xml2js')
+const WxCrypt = require('../util/crypt')
 
 
 const Controller = require('egg').Controller
@@ -19,7 +20,7 @@ function decryptXML(obj){
   // console.log(aesKey)
   // console.log(aesKey.slice(0, 16))
   const cipher = crypto.createDecipheriv('aes-256-cbc',aesKey,aesKey.slice(0, 16))
-  // cipher.setAutoPadding(false); // 是否取消自动填充 不取消
+  cipher.setAutoPadding(false); // 是否取消自动填充 不取消
   let this_text = cipher.update(obj.text, cipherEncoding, clearEncoding) + cipher.final(clearEncoding)
   let xmlText = ''
   xml2js.parseString(this_text.substring(20,this_text.lastIndexOf(">")+1), function(err, result){
@@ -39,7 +40,7 @@ function decryptXML(obj){
  * 根据信息拼装回复内容，加密返回Xml
  */
 function getReplyXml(jsonObj, ctx) {
-  let replyData = {
+  let replyMsg = {
     xml: {
       ToUserName: `<![CDATA[${jsonObj.FromUserName}]]>`,
       FromUserName: `<![CDATA[${jsonObj.ToUserName}]]>`,
@@ -50,10 +51,10 @@ function getReplyXml(jsonObj, ctx) {
   }
 
   var builder = new JSON2XML()
-  replyData = builder.parse(replyData)
+  replyMsg = builder.parse(replyMsg)
 
 
-  const msgBuf = new Buffer(replyData, 'utf-8')
+  const msgBuf = new Buffer(replyMsg, 'utf-8')
   const preBuf = randomPrefix(16)
   const netBuf = htonl(msgBuf.length)
   // 
@@ -97,7 +98,7 @@ function getReplyXml(jsonObj, ctx) {
 
   var xmlBuilder = new JSON2XML()
   finalXml = xmlBuilder.parse(finalXml)
-	return finalXml
+	return data
 }
 
 /**
@@ -153,45 +154,69 @@ function encryptXML(key, js){
   return encrypted
 }
 
-const js = {
-  "xml": {
-    "ToUserName": [
-        "gh_2f0afcf66173"
-    ],
-    "FromUserName": [
-        "o1txgwd6DbGMrdi_d8IfrqTydj48"
-    ],
-    "CreateTime": [
-        "1588934214"
-    ],
-    "MsgType": [
-        "text"
-    ],
-    "Content": [
-        "你好"
-    ],
-    "MsgId": [
-        "22748067022036753"
-    ]
-  }
-}
-
 class weChatReplyController extends Controller {
   async create() {
     const {ctx} = this
-    const AESKey = ctx.app.config.youxin.aesKey
     var jsonObj = Parser.parse(ctx.request.body)
+
+    const wxConfig = {
+      // 传入配置信息
+      token: ctx.app.config.youxin.token,
+      appid: ctx.app.config.youxin.appid,
+      msg_signature: 'xxx',
+      encodingAESKey: ctx.app.config.youxin.aesKey
+    }
+
+    var wxCrypt = new WxCrypt(wxConfig)
+    const xml = wxCrypt.decrypt(jsonObj.xml.Encrypt)
+
+    let msgJS = Parser.parse(xml)
+    let replyMsg = {
+      xml: {
+        ToUserName: `<![CDATA[${msgJS.FromUserName}]]>`,
+        FromUserName: `<![CDATA[${msgJS.ToUserName}]]>`,
+        CreateTime: new Date().getTime(),
+        MsgType: `<![CDATA[${'text'}]]>`,
+        Content: `<![CDATA[${'你好，我回复你了哦'}]]>`
+      }
+    }
+
+    let builder = new JSON2XML()
+    replyMsg = builder.parse(replyMsg)
+    replyMsg = wxCrypt.encrypt(replyMsg)
     
-    let data = decryptXML({
-      AESKey: AESKey,
-      text: jsonObj.xml.Encrypt
-    })
+    // 生成 MsgSignature
+    let Arr = [ctx.app.config.youxin.token, ctx.query.timestamp, ctx.query.nonce, replyMsg] // 密文
+    Arr.sort()
+    let str = '' + Arr[0] + Arr[1] + Arr[2] + Arr[3]
+    let mysignature = sha1(str)
 
-    console.log('合法的长这样: ', jsonObj.xml.Encrypt)
+    let finalXml = {
+      xml: {
+        Encrypt: `<![CDATA[${replyMsg}]]>`,
+        MsgSignature: `<![CDATA[${mysignature}]]>`,
+        TimeStamp: ctx.query.timestamp,
+        Nonce: `<![CDATA[${ctx.query.nonce}]]>`
+      }
+    }
 
-    const replyMsg = getReplyXml(data.msg.xml, ctx)
 
-    ctx.body = replyMsg
+
+    // var builder = new JSON2XML()
+    // replyMsg = builder.parse(replyMsg)
+
+
+    ctx.body = finalXml
+    
+    
+    // let data = decryptXML({
+    //   AESKey: AESKey,
+    //   text: jsonObj.xml.Encrypt
+    // })
+
+    // console.log('合法的长这样: ', jsonObj.xml.Encrypt)
+
+    // const replyMsg = getReplyXml(data.msg.xml, ctx)
   }
 
   async index() {
