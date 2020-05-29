@@ -5,8 +5,26 @@ module.exports = app => {
 
   const Wechat = app.model.define('wechat', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    session_key: STRING(100),
-    openid: STRING(100),
+    session_key: {
+      type: STRING(100),
+      allowNull: false,
+      defaultValue: ''
+    },
+    openid: {
+      type: STRING(100),
+      allowNull: false,
+      unique: true
+    },
+    type: {
+      type: INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
+    unionid: {
+      type: STRING(100),
+      allowNull: true,
+      defaultValue: ''
+    },
     created_at: DATE,
     updated_at: DATE,
     user_id: {
@@ -18,6 +36,16 @@ module.exports = app => {
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
+    },
+    access_token: {
+      type: STRING(100),
+      allowNull: true,
+      defaultValue: ''
+    },
+    refresh_token: {
+      type: STRING(100),
+      allowNull: true,
+      defaultValue: ''
     }
   });
 

@@ -21,6 +21,7 @@ module.exports = app => {
    */
   // 管理员
   router.resources('/api/v1/login', app.controller.login);
+  router.post('/api/v1/logout', app.controller.login.logout);
   router.resources('/api/v1/admin', app.controller.admin);
   router.resources('/api/v1/permisson', app.controller.permission);
   router.resources('/api/v1/role', app.controller.role);
@@ -30,6 +31,7 @@ module.exports = app => {
 
   //登录
   router.resources('/api/v1/session', app.controller.session);
+  router.resources('/api/v1/webAuth', app.controller.webAuth);
 
   // 获取bottle相关
   router.resources('/api/v1/bottle', app.controller.bottle);
@@ -48,7 +50,10 @@ module.exports = app => {
   /**
    * 公众号相关
    */
-
+  // 询问微信相关的信息
+  // router.resources('/api/v1/askWechat', app.controller.askWechat)
+  router.resources('/api/v1/room', app.controller.room.room)
+  router.get('/api/v1/room/canSee', app.controller.room.room.canSee)
   // 自动回复
   router.resources('/api/v1/weChat/reply', app.controller.weChat.autoReply)
   

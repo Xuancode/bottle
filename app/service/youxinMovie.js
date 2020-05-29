@@ -9,7 +9,6 @@ function toInt(str) {
 class YouxinMovieService extends Service {
   async saveMovies(movieArr) {
     const { ctx } = this
-    console.log(movieArr)
     const res = ctx.model.Movie.bulkCreate(movieArr, {validate: true, updateOnDuplicate:["link", "pass_code", "editor_id", "introduction", "updated_at", "state"]})
     return res
   }

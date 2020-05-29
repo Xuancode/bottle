@@ -11,7 +11,7 @@ module.exports = app => {
       unique: true,
     },
     item_id: {
-      type: BIGINT(15), // 13位时间戳+2位随机数
+      type: BIGINT(15), 
       allowNull: true,
       unique: true,
     },
@@ -44,8 +44,7 @@ module.exports = app => {
   })
 
   Item.associate = function() {
-    app.model.Item.belongsTo(app.model.Admin, {foreignKey: 'admin_id' , targetKey: 'admin_id'}),
-    app.model.Item.belongsToMany(app.model.Admin, { as: 'Item', through: 'admin_item', foreignKey: 'item_id' })
+    app.model.Item.belongsToMany(app.model.Admin, { as: 'items', through: 'admin_item', foreignKey: 'item_id' })
   }
 
   return Item;

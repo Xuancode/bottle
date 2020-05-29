@@ -11,16 +11,24 @@ class UpDateWeChatAccessToken extends Subscription {
 
   // subscribe 是真正定时任务执行时被运行的函数
   async subscribe() {
-    const appid = this.config.wechat.appid
-    const secret = this.config.wechat.secretid
-    const res = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appid}&secret=${secret}`, {
-      dataType: 'json',
-      method: 'GET'
-    })
-    if (res && res.data && res.data.access_token) {
-      this.ctx.app.Cache.set('weChatAccessToken', res.data.access_token, 60 * 60 * 2) // 官方2小时有效
+    // const appid = this.config.weChat['110'].appid
+    // const secret = this.config.weChat['110'].secretid
+
+    for (const key in this.config.weChat) {
+      if (this.config.weChat.hasOwnProperty(key)) {
+        const ele = this.config.weChat[key]
+        this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${ele.appid}&secret=${ele.secretid}`, {
+          dataType: 'json',
+          method: 'GET'
+        }).then(res => {
+          if (res && res.data && res.data.access_token) {
+            this.ctx.app.Cache.set(key, res.data.access_token, 60 * 60 * 2) // 官方2小时有效
+          }
+        }).catch(err => {
+          throw new Error(err)
+        })
+      }
     }
-    console.log(this.ctx.app.Cache.get('weChatAccessToken'))
   }
 }
 

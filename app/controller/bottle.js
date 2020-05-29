@@ -11,6 +11,7 @@ exports.create = async ctx => {
   const uid = token.uid
   ctx.validate(createRule, ctx.request.body)
   const { text, number, id} = ctx.request.body
+  console.log(text, number, uid)
   var data = await ctx.model.Bottle.create({ text, number, user_id: uid})
 
   // 返回所有数据
@@ -54,7 +55,6 @@ exports.destroy = async ctx => {
   )
   // 返回所有数据
   data = await ctx.service.bottle.getBottle(1, 999)
-  console.log(data)
   ctx.status = 201
   ctx.body = {data, ...ctx.helper.jsonSuccess()}
 }

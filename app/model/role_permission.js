@@ -7,11 +7,13 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     role_id: {
       type: INTEGER,
-      allowNull: false
+      allowNull: false,
+      onDelete: "CASCADE"
     },
     permission_id: {
       type: INTEGER, // 13位时间戳+2位随机数
       allowNull: false,
+      onDelete: "CASCADE"
     },
     status: {
       type: INTEGER(1),

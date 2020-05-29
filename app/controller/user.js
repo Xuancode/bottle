@@ -55,10 +55,6 @@ exports.index = async ctx => {
     // where: { status: 'publish' },
     order: [['id', 'desc']],  // 排序方式，注意写法
   })
-
-
-
-
   ctx.body = openid
 };
 

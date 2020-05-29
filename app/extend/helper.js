@@ -39,7 +39,7 @@ module.exports = {
 
   // http返回便捷
   jsonSuccess() {
-    return {msg: "success!", errCode: 0}
+    return {msg: "success!", code: 20000}
   },
 
   // http返回便捷
@@ -59,7 +59,7 @@ module.exports = {
     return uploadToken
   },
 
-  /** 过滤obj对象中key值的为undefined的key */
+  /** 过滤obj对象中key值的为undefined的key，参数空是可以留下的 */
   fliterUndefinedParams(tempObj) {
     let obj = {}
     for (let key in tempObj) {
@@ -70,7 +70,7 @@ module.exports = {
     return obj
   },
   
-  /** 过滤obj对象中key值的为undefined的key */
+  /** 过滤obj对象中key值的为非的key，参数空不可留下 */
   fliterFalseParams(tempObj) {
     let obj = {}
     for (let key in tempObj) {

@@ -1,4 +1,5 @@
 const NodeCache = require( "node-cache" )
+const resCode = require('./app/util/resCode')
 
 // 在各种生命周期函数中执行任务
 
@@ -57,6 +58,7 @@ class AppBootHook {
     // });
 
     this.app.Cache = new NodeCache() // 创建缓存
+    this.app.resCode = resCode
     await this.app.runSchedule('upDateWeChatAccessToken') // 首次执行定时任务，获取微信token
   }
 }

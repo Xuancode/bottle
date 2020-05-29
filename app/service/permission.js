@@ -47,7 +47,7 @@ class PermissionService extends Service {
   async getRouterByAdminID(admin_id, ctx) {
     ctx = ctx ? ctx : this.ctx
     const resData = await ctx.model.Admin.findOne({
-      where: {id: admin_id},
+      where: {admin_id: admin_id},
       include: [{
         model: ctx.model.Role,
         include: [{

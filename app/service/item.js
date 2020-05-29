@@ -12,8 +12,8 @@ class ItemService extends Service {
     const res = await ctx.model.Item.create({item_name, item_info, admin_id, item_id})
     return res
   }
-  async getItem(page, size, id) {
-    if (page && size && !id) {
+  async getItem(page, size, item_name) {
+    if (page && size && !item_name) {
       let ctx = this.ctx
       page = toInt(page)
       size = toInt(size)
@@ -39,7 +39,7 @@ class ItemService extends Service {
       return {data: resData.rows, meta: {pagination: pagination}}
     } else {
       let ctx = this.ctx
-      const resData = await ctx.model.Item.findOne({where: {item_id: id}, attributes: { exclude: ['createdAt', 'updatedAt']}})
+      const resData = await ctx.model.Item.findOne({where: {item_name: item_name}, attributes: { exclude: ['createdAt', 'updatedAt']}})
       return {data: resData}
     }
   }
@@ -47,7 +47,6 @@ class ItemService extends Service {
   /** 修改item信息 */
   async updateItem(obj, item_id) {
     const ctx = this.ctx
-    const Op = this.app.Sequelize.Op
     let item = await ctx.model.Item.findOne({
       where: {item_id}
     })
@@ -60,21 +59,11 @@ class ItemService extends Service {
     return item
   }
 
-  async destroyAdmin(idArr) {
-    // 1、删除role的关系 2、删除role
+  async destroyItem(idArr) {
     const ctx = this.ctx
     const Op = this.app.Sequelize.Op
-    
-    const admin = await ctx.model.Admin.findOne({where: {id: idArr[0]}})
-    return ctx.model.transaction(t => {
-      return admin.setRoles([], {transaction: t}).then(async () => {
-        return admin.destroy()
-      })
-    }).then(res=> {
-      return res
-    }).catch(err=> {
-      throw new Error(err)
-    })
+    const items = await ctx.model.Item.destroy({where: {item_id: {[Op.in]: idArr}}})
+    return items
   }
 }
 module.exports = ItemService;

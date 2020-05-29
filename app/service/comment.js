@@ -36,7 +36,6 @@ class CommentService extends Service {
       page: page,
       total_pages: parseInt((resData.count + size -1 ) / size) ,
     }
-    console.log(pagination)
     return {data: resData.rows, meta: {pagination: pagination}}
   }
 

@@ -8,11 +8,13 @@ module.exports = {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       admin_id: {
         type: STRING(30),
-        allowNull: false
+        allowNull: false,
+        onDelete: "CASCADE"
       },
       role_id: {
         type: INTEGER, // 13位时间戳+2位随机数
         allowNull: false,
+        onDelete: "CASCADE"
       },
       is_delete: {
         type: INTEGER(1),

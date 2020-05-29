@@ -10,59 +10,96 @@ function toInt(str) {
 
 
 class SessionService extends Service {
-  async getSession(wxcode) {
+  async miniPlogin(wxcode) {
     // 请求小程序服务器拿到session
-    const appid = this.config.wechat.appid;
-    const secretid = this.config.wechat.secretid;
+    const appid = this.config.weChat['110'].appid;
+    const secretid = this.config.weChat['110'].secretid;
     const result = await this.ctx.curl(`https://api.weixin.qq.com/sns/jscode2session?appid=${appid}&secret=${secretid}&js_code=${wxcode}&grant_type=authorization_code
-    `, { dataType: 'json' });
+    `, { dataType: 'json' })
     // 报错处理
     if (!result.data.session_key) {
       console.log("现在懒，交给error_handle处理")
     }
     // console.log(result)
-    var {session_key, openid} = result.data;
-    var name = '', phone = ''
     var uid = ''
     var user = {}
 
     // 查询wechat、user数据库是否存在该openid的用户，不存在就新建后执行登录，存在则更新信息后直接执行登录
     // openid = '7777777'
-    let res = await this.ctx.model.Wechat.findOne({
+    user = await this.ctx.service.session.openid2uid(result.data.openid, result.data)
+    uid = user.user_id
+    // 后进行自定义用户体系的登录
+    const token = await this.ctx.service.session.uid2Token(uid)
+    // console
+    let data = {token: token,user_info: user}
+    return data
+  }
+
+  // async h5Login(openid) {
+  //   const { ctx } = this
+  //   console.log(ctx.request.body)
+  //   // const data = {
+  //   //   access_token: ctx.request.body.access_token,
+  //   //   refresh_token: ctx.request.body.refresh_token
+  //   // }
+  //   // user = await ctx.service.session.openid2uid(openid, data)
+  // }
+
+  // async h5CodeLogin(code) {
+
+  // }
+  async getOpenidByCode(code) {
+    const {ctx} = this
+    const {appid, secretid} = this.config.weChat['310']
+    const result = await this.ctx.curl(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secretid}&code=${code}&grant_type=authorization_code`, { method: 'GET', dataType: 'json' })
+    let user = null
+    if (result.data.errcode) {
+      ctx.body = { ...this.app.resCode['REMOTE_ERR'], more_msg: result.data}
+    } else {
+      user = await ctx.service.session.openid2uid(result.data.openid, result.data)
+      ctx.body = user
+    }
+
+  }
+  
+  /**openid2uid */
+  async openid2uid(openid, data) {
+    // 查询wechat、user数据库是否存在该openid的用户，不存在就新建后执行登录，存在则更新信息后直接执行登录
+    const {ctx} = this
+    const {type} = ctx.request.body
+    const {session_key, refresh_token, access_token, unionid} = data
+    let tempObj = {session_key, refresh_token, access_token, unionid}
+    tempObj = ctx.helper.fliterUndefinedParams(tempObj)
+    console.log(tempObj)
+
+    let res = await ctx.model.Wechat.findOne({
       where: {openid}
     })
+    let user = null
     if (res) {
       // 已存在，更新wecaht表
-      // console.log(new Date())
-      const wechatRes = await this.ctx.model.Wechat.update({session_key: session_key}, {where: {openid: openid}})
-      user = await this.ctx.model.User.findOne({where: {user_id: res.user_id}})
+      await ctx.model.Wechat.update({type, ...tempObj}, {where: {openid: openid}})
+      user = await ctx.model.User.findOne({where: {user_id: res.user_id}})
     } else {
       // 不存在，新建用户、wechat信息
       let nickName = 'ID' + Math.round(Math.random()*1000000)
-      let userRes = await this.ctx.model.User.create({
-        name: name ? name : nickName,
-        phone: phone ? phone : 0,
+      let userRes = await ctx.model.User.create({
+        name: nickName,
         user_id: short.generate(),   // 生成唯一id
-        avatar: 'http://tmp/wx27d8d47c69b319c9.o6zAJs6qwYjcD2peZNWp1gl52NO0.TA4nkxQbZf2597eff96b8dcb35a2f032b04e5043f3d3.png'
       })
       user = userRes
 
-      await this.ctx.model.Wechat.create({
-        session_key: session_key,
+      await ctx.model.Wechat.create({
         openid: openid,
-        user_id: userRes.user_id
+        user_id: userRes.user_id,
+        type,
+        ...tempObj
       })
     }
-    uid = user.user_id
-    // 后进行自定义用户体系的登录
-    const token = await this.ctx.service.session.login(uid)
-    // console
-    let data = {token: token,user_info: user}
-    return data;
+    return user
   }
-
   /** 初始化token */
-  async login(uid) {
+  async uid2Token(uid) {
     const data = {
       uid: uid
     }

@@ -39,7 +39,8 @@ module.exports = app => {
   Admin.associate = function() {
     app.model.Admin.hasMany(app.model.Movie, {constraints: false, foreignKey: 'admin_id' , targetKey: 'admin_id'}),
     // app.model.Admin.belongsToMany(app.model.Item, { through: 'admin_item', foreignKey: 'admin_id' }),
-    app.model.Admin.belongsToMany(app.model.Role, {through: 'admin_role', foreignKey: 'admin_id' }) // 此处一直加不上别名，加上后多对多关系就失效，未知原因
+    app.model.Admin.belongsToMany(app.model.Role, {through: 'admin_role', foreignKey: 'admin_id' }), // 此处一直加不上别名，加上后多对多关系就失效，未知原因
+    app.model.Admin.belongsToMany(app.model.Item, {through: 'admin_item', foreignKey: 'admin_id' })
   }
   return Admin
 }

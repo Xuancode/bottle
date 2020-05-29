@@ -49,8 +49,6 @@ class YouxinMovieController extends Controller {
     // ctx.validate(loginRule)
     const {movieArr} = ctx.request.body
     const saveInfo = await ctx.service.youxinMovie.saveMovies(movieArr)
-    
-    console.log(saveInfo)
     ctx.status = 201
     ctx.body = {msg: 'success!', code: 20000, data: {length: saveInfo.length}}
     // ctx.body = '123'
@@ -58,7 +56,6 @@ class YouxinMovieController extends Controller {
 
   async index() {
     const { ctx } = this
-    console.log(ctx.query)
     const {page, size, name, link, pass_code, admin_id, introduction, id, state, sort} = ctx.query
     let tempObj = {link, pass_code, admin_id, introduction, id, state}
 

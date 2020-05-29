@@ -50,7 +50,8 @@ class itemController extends Controller {
   async create() {
     const { ctx } = this
     ctx.validate(createRule, ctx.request.body)
-    const {item_name, item_info, admin_id} = ctx.request.body
+    const {item_name, item_info} = ctx.request.body
+    const admin_id = ctx.uid
     var res = await ctx.service.item.createItem(item_name, item_info, admin_id)
 
     ctx.status = 201
@@ -59,8 +60,8 @@ class itemController extends Controller {
 
   async index() {
     const { ctx } = this
-    const { page, size, id } = ctx.query
-    var res = await ctx.service.item.getItem(page, size, id)
+    const { page, size, item_name } = ctx.query
+    var res = await ctx.service.item.getItem(page, size, item_name)
 
     ctx.status = 200
     ctx.body = {msg: 'success!', code: 20000, ...res}
@@ -73,7 +74,6 @@ class itemController extends Controller {
 
     let tempObj = {item_name, admin_id, item_info, state, is_delete}
     let obj = ctx.helper.fliterUndefinedParams(tempObj)
-
     const res = await ctx.service.item.updateItem(obj, item_id)
     ctx.status = 201
     ctx.body = {msg: 'success!', data: res, code: 20000}
@@ -83,9 +83,9 @@ class itemController extends Controller {
     const { ctx } = this
     ctx.validate(deleteRule, ctx.request.body)
     const {idArr} = ctx.request.body
-    const res = await ctx.service.role.destroyRole(idArr)
+    const res = await ctx.service.item.destroyItem(idArr)
     ctx.status = 200
-    ctx.body = {msg: 'success!', data: {delete_length: res.length}, code: 20000}
+    ctx.body = {msg: 'success!', data: {delete_length: res}, code: 20000}
   }
 }
 
