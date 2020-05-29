@@ -16,7 +16,7 @@ class weChatReplyController extends Controller {
       // 传入配置信息
       token: ctx.app.config.weChat['210'].token,
       appid: ctx.app.config.weChat['210'].appid,
-      msg_signature: 'xxx', // 微信发来的签名
+      msg_signature: 'xxx', // 微信发来的签名，后边补上验证
       encodingAESKey: ctx.app.config.weChat['210'].aesKey
     }
 
@@ -25,6 +25,8 @@ class weChatReplyController extends Controller {
 
     // 回复信息
     let msgJS = Parser.parse(xml)
+    console.log(msgJS)
+    ctx.logger.info('传来的: %j', msgJS)
     let replyMsg = {
       xml: {
         ToUserName: `<![CDATA[${msgJS.xml.FromUserName}]]>`,
