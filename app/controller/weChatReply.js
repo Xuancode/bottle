@@ -14,15 +14,16 @@ class weChatReplyController extends Controller {
 
     const wxConfig = {
       // 传入配置信息
-      token: ctx.app.config.youxin.token,
-      appid: ctx.app.config.youxin.appid,
-      msg_signature: 'xxx',
-      encodingAESKey: ctx.app.config.youxin.aesKey
+      token: ctx.app.config.weChat['210'].token,
+      appid: ctx.app.config.weChat['210'].appid,
+      msg_signature: 'xxx', // 微信发来的签名
+      encodingAESKey: ctx.app.config.weChat['210'].aesKey
     }
 
     var wxCrypt = new WxCrypt(wxConfig)
     const xml = wxCrypt.decrypt(jsonObj.xml.Encrypt)
 
+    // 回复信息
     let msgJS = Parser.parse(xml)
     let replyMsg = {
       xml: {
@@ -38,7 +39,7 @@ class weChatReplyController extends Controller {
     replyMsg = wxCrypt.encrypt(replyMsg)
     
     // 生成 MsgSignature
-    let Arr = [ctx.app.config.youxin.token, ctx.query.timestamp, ctx.query.nonce, replyMsg] // 密文
+    let Arr = [ctx.app.config.weChat['210'].token, ctx.query.timestamp, ctx.query.nonce, replyMsg] // 密文
     Arr.sort()
     let str = '' + Arr[0] + Arr[1] + Arr[2] + Arr[3]
     let mysignature = sha1(str)
@@ -63,7 +64,7 @@ class weChatReplyController extends Controller {
     const {signature, timestamp, nonce, echostr} = ctx.query
     ctx.logger.info('request_query: %j', ctx.query)
 
-    const token = this.config.youxin.token
+    const token = ctx.app.config.weChat['210'].token
     let Arr = [token, timestamp, nonce]
     Arr.sort()
     let str = '' + Arr[0] + Arr[1] + Arr[2]
