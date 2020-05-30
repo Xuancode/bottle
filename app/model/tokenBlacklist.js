@@ -3,7 +3,7 @@
 module.exports = app => {
   const { STRING, INTEGER, DATE } = app.Sequelize;
 
-  const Adminblacklist = app.model.define('adminblacklist', {
+  const TokenBlacklist = app.model.define('tokenBlacklist', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     token: STRING(),
     created_at: DATE,
@@ -13,5 +13,5 @@ module.exports = app => {
   // Adminblacklist.associate = function() {
 
   // }
-  return Adminblacklist
+  return TokenBlacklist
 }
