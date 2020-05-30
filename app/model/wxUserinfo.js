@@ -6,11 +6,6 @@ module.exports = app => {
   const WxUserinfo = app.model.define('wxUserinfo', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     nickname: STRING(30),
-    openid: {
-      type: STRING(100),
-      allowNull: false,
-      unique: true
-    },
     sex: INTEGER(1),
     language: STRING(10),
     city: STRING(20),

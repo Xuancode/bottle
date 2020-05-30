@@ -35,6 +35,10 @@ module.exports = {
           type: STRING(100),
           allowNull: true,
           defaultValue: ''
+        }, { transaction: t }),
+        queryInterface.addColumn('wechat', 'isFocus', {
+          type: INTEGER(2),
+          allowNull: true
         }, { transaction: t })
       ])
     })
@@ -55,7 +59,8 @@ module.exports = {
         queryInterface.removeColumn('wechat', 'type', { transaction: t }),
         queryInterface.removeColumn('wechat', 'unionid', { transaction: t }),
         queryInterface.removeColumn('wechat', 'access_token', { transaction: t }),
-        queryInterface.removeColumn('wechat', 'refresh_token', { transaction: t })
+        queryInterface.removeColumn('wechat', 'refresh_token', { transaction: t }),
+        queryInterface.removeColumn('wechat', 'isFocus', { transaction: t })
       ])
     })
   },
