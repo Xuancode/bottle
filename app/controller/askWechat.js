@@ -5,7 +5,7 @@ const Controller = require('egg').Controller
 class AskWechatController extends Controller {
   async focusStatus() {
     // const {ctx} = this
-    // const resUser = await ctx.service.webAuth.getUidByCode(ctx.request.body.code)
+    // const resUser = await ctx.service.webAuth.getUserByCode(ctx.request.body.code)
     // if (!resUser) {
     //   return
     // }

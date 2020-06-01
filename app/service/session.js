@@ -35,32 +35,19 @@ class SessionService extends Service {
     return data
   }
 
-  // async h5Login(openid) {
-  //   const { ctx } = this
-  //   console.log(ctx.request.body)
-  //   // const data = {
-  //   //   access_token: ctx.request.body.access_token,
-  //   //   refresh_token: ctx.request.body.refresh_token
-  //   // }
-  //   // user = await ctx.service.session.openid2uid(openid, data)
+  // async getOpenidByCode(code) {
+  //   const {ctx} = this
+  //   const {appid, secretid} = this.config.weChat['310']
+  //   const result = await this.ctx.curl(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secretid}&code=${code}&grant_type=authorization_code`, { method: 'GET', dataType: 'json' })
+  //   let user = null
+  //   if (result.data.errcode) {
+  //     ctx.body = { ...this.app.resCode['REMOTE_ERR'], more_msg: result.data}
+  //   } else {
+  //     user = await ctx.service.session.openid2uid(result.data.openid, result.data)
+  //     ctx.body = user
+  //   }
+
   // }
-
-  // async h5CodeLogin(code) {
-
-  // }
-  async getOpenidByCode(code) {
-    const {ctx} = this
-    const {appid, secretid} = this.config.weChat['310']
-    const result = await this.ctx.curl(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secretid}&code=${code}&grant_type=authorization_code`, { method: 'GET', dataType: 'json' })
-    let user = null
-    if (result.data.errcode) {
-      ctx.body = { ...this.app.resCode['REMOTE_ERR'], more_msg: result.data}
-    } else {
-      user = await ctx.service.session.openid2uid(result.data.openid, result.data)
-      ctx.body = user
-    }
-
-  }
   
   /**openid2uid */
   async openid2uid(openid, data) {

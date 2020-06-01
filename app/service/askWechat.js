@@ -12,7 +12,7 @@ class AskWechatService extends Service {
     const {ctx} = this
 
     const {appid, secretid} = this.config.weChat[ctx.query.type]
-    const wxUser = await ctx.model.Wechat.findOne({where: {user_id: uid, type: type}})
+    const wxUser = await ctx.model.Wechat.findOne({where: {user_id: uid, type: type, is_focus: 1}})
     if (!wxUser) {
       return false
     }

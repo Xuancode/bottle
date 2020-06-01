@@ -19,16 +19,11 @@ module.exports = {
         unique: true,
         allowNull: true,
       },
-      user_id: {
-        type: STRING(30),
-        unique: true,
-        allowNull: false
-      },
       created_at: DATE,
       updated_at: DATE
     })
   },
-  // 在执行数据库降级时调用的函数，删除 users 表
+  // 在执行数据库降级时调用的函数，删除 wxUserinfo 表
   down: async queryInterface => {
     await queryInterface.dropTable('wxUserinfo')
   },

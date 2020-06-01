@@ -11,7 +11,7 @@ module.exports = options => {
     } else {
       try {
         const verifyData = await ctx.helper.resolveToken(token)
-        const blackToken = await ctx.model.Adminblacklist.findOne({where: {token: token}})
+        const blackToken = await ctx.model.TokenBlacklist.findOne({where: {token: token}})
         if (verifyData.uid && !blackToken) {
           // 注意，还需要补验证
           ctx.uid = verifyData.uid

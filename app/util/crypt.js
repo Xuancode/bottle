@@ -11,7 +11,7 @@ class WxCrypt {
     this.token = opts.token;
     this.appid = opts.appid;
     this.msg_signature = opts.msg_signature; //query 传进来签名
-    this.aesKey = new Buffer(opts.encodingAESKey + '=', 'base64');
+    this.aesKey = Buffer.from(opts.encodingAESKey + '=', 'base64');
     this.IV = this.aesKey.slice(0, 16)
   }
   encrypt(xmlMsg) {
@@ -22,11 +22,11 @@ class WxCrypt {
      * buf的字节长度需要填充到 32的整数，填充长度为 32-buf.length%32, 每一个字节为 32-buf.length%32
      */
     let random16 = crypto.pseudoRandomBytes(16);
-    let msg = new Buffer(xmlMsg);
-    let msgLength = new Buffer(4);
+    let msg = Buffer.from(xmlMsg);
+    let msgLength = Buffer.alloc(4);
     msgLength.writeUInt32BE(msg.length, 0);
 
-    let corpId = new Buffer(this.appid);
+    let corpId = Buffer.from(this.appid);
 
     let raw_msg = Buffer.concat([random16, msgLength, msg, corpId]);
     let cipher = crypto.createCipheriv('aes-256-cbc', this.aesKey, this.IV);
@@ -75,7 +75,7 @@ class WxCrypt {
     if (needPadLen == 0) {
       needPadLen = blockSize
     }
-    let pad = new Buffer(needPadLen)
+    let pad = Buffer.alloc(needPadLen)
     pad.fill(needPadLen)
     let newBuff = Buffer.concat([buff, pad])
     return newBuff

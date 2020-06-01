@@ -18,11 +18,6 @@ module.exports = app => {
       allowNull: true,
       unique: true
     },
-    user_id: {
-      type: STRING(30),
-      unique: true,
-      allowNull: false
-    },
     created_at: DATE,
     updated_at: DATE
   });
