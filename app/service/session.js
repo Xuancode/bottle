@@ -69,10 +69,9 @@ class SessionService extends Service {
       user = await ctx.model.User.findOne({where: {user_id: res.user_id}})
     } else {
       // 不存在，新建用户、wechat信息
-      let nickName = 'ID' + Math.round(Math.random()*1000000)
       let userRes = await ctx.model.User.create({
-        name: nickName,
-        user_id: short.generate(),   // 生成唯一id
+        name: ctx.service.user.createNickName(),
+        user_id: ctx.service.user.createUid()   // 生成唯一id
       })
       user = userRes
 

@@ -34,9 +34,7 @@ module.exports = app => {
   User.associate = function() {
     app.model.User.hasOne(app.model.Wechat, {constraints: false, foreignKey: 'user_id' , targetKey: 'user_id'})
     app.model.User.hasMany(app.model.Bottle, {constraints: false, foreignKey: 'user_id' , targetKey: 'user_id'})
-    // app.model.User.hasMany(app.model.Comment, {constraints: false})
-    // app.model.Wechat.belongsTo(app.model.User, {as: 'user'})
-    // app.model.Wechat.belongsTo(app.model.User)
+    app.model.User.hasOne(app.model.Union, { through: 'user_union', foreignKey: 'user_id' })
   }
   return User;
 };

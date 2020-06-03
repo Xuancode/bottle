@@ -1,4 +1,4 @@
-const Service = require('egg').Service;
+const Service = require('egg').Service
 
 const short = require('short-uuid');
 
@@ -29,43 +29,108 @@ class WebAuthService extends Service {
   async creatOrUpdateWechatByHasUnionid(openid, data) {
     // 查询wechat数据库是否存在该openid的用户，不存在就新建后执行登录，存在则更新信息后直接执行登录
     const {ctx} = this
-    const {session_key, refresh_token, access_token, unionid, is_focus, type} = data
-    let tempObj = {session_key, refresh_token, access_token, unionid, is_focus, type}
+    const {session_key, refresh_token, access_token, is_focus, type, unionid} = data
+    let tempObj = {session_key, refresh_token, access_token, is_focus, type}
     tempObj = ctx.helper.fliterUndefinedParams(tempObj)
-    let res = await ctx.model.Wechat.findOne({
-      where: {openid}
-    })
+    console.log(tempObj)
+    let wechatRes = await ctx.model.Wechat.findOne({where: {openid}}) // 此处仍会报不知user_id， model已经删除该属性了不知为何，只能筛选属性
+    console.log('没走出这步')
+    // , attributes: ['openid']
     let user = null
-    if (res) {
-      // 已存在，更新wecaht表
-      await ctx.model.Wechat.update({...tempObj}, {where: {openid: openid}})
-      user = await ctx.model.User.findOne({where: {user_id: res.user_id}})
-    } else {
-      // 不存在，新建用户、wechat信息
-      let nickName = 'ID' + Math.round(Math.random()*1000000)
-      // 使用事务新建
-      const Op = this.app.Sequelize.Op
-      let transaction = null
-      try {
-        transaction = await this.ctx.model.transaction();
-        user = await ctx.model.User.create({
-          name: nickName,
-          user_id: short.generate(),   // 生成唯一id
-        }, { transaction })
-        await ctx.model.Wechat.create({
-          openid: openid,
-          user_id: user.user_id,
-          ...tempObj
-        }, { transaction })
-        await transaction.commit()
-        return user
-      } catch (error) {
-        await transaction.rollback()
-        ctx.body = {...this.app.resCode['ERROR'], msg: '新建失败'}
-        return {msg: '新建失败'}
+
+    // 事务开始
+    const Op = this.app.Sequelize.Op
+    let transaction = null
+    try {
+      transaction = await this.ctx.model.transaction()
+      // 已存在，更新wecaht表, 不存在则新建
+      if (wechatRes) {
+        console.log('有wechatRes')
+        await ctx.model.Wechat.update({...tempObj}, {where: {openid}}, {transaction})
+      } else {
+        console.log('无wechatRes')
+        wechatRes = await ctx.model.Wechat.create({ openid, ...tempObj}, { transaction })
       }
+      // 不存在union则新建
+      console.log('准备创建unionRes')
+      // console.log(ctx.model)
+      let unionRes = await ctx.model.Union.findOne({include: [{model: ctx.model.Wechat, attributes: ['id']}], attributes: ['unionid']}, { transaction })
+
+      console.log('准备创建unionRes没走出来？')
+
+
+      if (!unionRes) {
+        unionRes = await ctx.model.Union.create({openid, unionid}, { transaction })
+      }
+
+
+
+
+
+      console.log('准备创建userRes')
+      let userRes = await ctx.model.User.findOrCreate({
+        where: {unionid: unionRes.unionid}, 
+        defaults: {user_id: ctx.service.user.createUid()}
+      },{ transaction })
+      // 创建/覆盖两个关联表的关联关系
+      console.log('准备创建Wechat关系')
+      await ctx.model.Union.setWechats([wechatRes], {transaction})
+      console.log('准备创建user关系')
+      await ctx.model.Union.setUsers([userRes], {transaction})
+
+      await transaction.commit()
+      ctx.body = {...this.app.resCode['SUCCESS'], msg: '新建成功'}
+    } catch (error) {
+      console.log('错了')
+      console.log(error)
+      await transaction.rollback()
+      ctx.body = {...this.app.resCode['ERROR'], msg: '新建失败'}
     }
+
+    
+
+
+    // if (res) {
+    //   // 已存在，更新wecaht表
+    //   await ctx.model.Wechat.update({...tempObj}, {where: {openid}})
+
+    //   // 
+    //   ctx.service.Union.createUnionByOpenid(openid, unionid)
+
+    //   user = await ctx.model.User.findOne({where: {user_id: res.user_id}})
+    // } else {
+    //   // 不存在，新建用户、wechat信息
+    //   let nickName = 'ID' + Math.round(Math.random()*1000000)
+    //   // 使用事务新建
+    //   const Op = this.app.Sequelize.Op
+    //   let transaction = null
+    //   try {
+    //     transaction = await this.ctx.model.transaction();
+    //     user = await ctx.model.User.create({
+    //       name: nickName,
+    //       user_id: short.generate(),   // 生成唯一id
+    //     }, { transaction })
+    //     await ctx.model.Wechat.create({
+    //       openid: openid,
+    //       user_id: user.user_id,
+    //       ...tempObj
+    //     }, { transaction })
+    //     await transaction.commit()
+    //     return user
+    //   } catch (error) {
+    //     await transaction.rollback()
+    //     ctx.body = {...this.app.resCode['ERROR'], msg: '新建失败'}
+    //     return {msg: '新建失败'}
+    //   }
+    // }
+
+
+
     return user
+  }
+  
+  createUserByUnionid() {
+    
   }
 }
 module.exports = WebAuthService

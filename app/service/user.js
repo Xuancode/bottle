@@ -1,4 +1,6 @@
-const Service = require('egg').Service;
+const Service = require('egg').Service
+const short = require('short-uuid')
+
 class UserService extends Service {
   // 默认不需要提供构造函数。
   // constructor(ctx) {
@@ -23,6 +25,12 @@ class UserService extends Service {
   async getPicture(uid) {
     const result = await this.ctx.curl(`http://photoserver/uid=${uid}`, { dataType: 'json' });
     return result.data;
+  }
+  async createNickName() {
+    return 'ID' + Math.round(Math.random()*1000000)
+  }
+  async createUid() {
+    return short.generate()
   }
 }
 module.exports = UserService;

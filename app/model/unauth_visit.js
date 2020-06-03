@@ -3,14 +3,14 @@
 module.exports = app => {
   const { STRING, INTEGER, DATE, TINYINT } = app.Sequelize;
 
-  const Userlogin = app.model.define('userlogin', {
+  const Unauth_visit = app.model.define('unauth_visit', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    user_id: {
-      type: STRING(30), 
-      allowNull: false, 
+    unionid: {
+      type: STRING(100),
+      allowNull: false,
       references: {
-        model: "user",
-        key: "user_id"
+        model: "union",
+        key: "unionid"
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE"
@@ -33,8 +33,8 @@ module.exports = app => {
     updated_at: DATE
   })
 
-  Userlogin.associate = function() {
-    app.model.Userlogin.belongsTo(app.model.User, {as: 'loginRecord', foreignKey: 'user_id'})
+  Unauth_visit.associate = function() {
+    app.model.UnauthVisit.belongsTo(app.model.Union, {as: 'unauthRecord', foreignKey: 'unionid'})
   }
-  return Userlogin;
+  return Unauth_visit
 };

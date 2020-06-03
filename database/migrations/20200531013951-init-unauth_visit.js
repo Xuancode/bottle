@@ -4,14 +4,14 @@ module.exports = {
   // 在执行数据库升级时调用的函数
   up: async (queryInterface, Sequelize) => {
     const { INTEGER, DATE, STRING } = Sequelize;
-    await queryInterface.createTable('userlogin', {
+    await queryInterface.createTable('unauth_visit', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      user_id: {
-        type: STRING(30), 
-        allowNull: false, 
+      unionid: {
+        type: STRING(100),
+        allowNull: false,
         references: {
-          model: "user",
-          key: "user_id"
+          model: "union",
+          key: "unionid"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
@@ -36,6 +36,6 @@ module.exports = {
   },
   // 在执行数据库降级时调用的函数
   down: async queryInterface => {
-    await queryInterface.dropTable('userlogin')
+    await queryInterface.dropTable('unauth_visit')
   },
 }

@@ -6,6 +6,9 @@ class WebAuthController extends Controller {
   async create() {
     const {ctx} = this
     const resUser = await ctx.service.webAuth.getUserByCode(ctx.request.body.code)
+    console.log('冒险完成')
+    return
+    
     if (!resUser) {
       return
     }
