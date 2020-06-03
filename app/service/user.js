@@ -26,10 +26,10 @@ class UserService extends Service {
     const result = await this.ctx.curl(`http://photoserver/uid=${uid}`, { dataType: 'json' });
     return result.data;
   }
-  async createNickName() {
+  createNickName() {
     return 'ID' + Math.round(Math.random()*1000000)
   }
-  async createUid() {
+  createUid() {
     return short.generate()
   }
 }

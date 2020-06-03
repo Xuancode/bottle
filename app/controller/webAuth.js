@@ -22,7 +22,12 @@ class WebAuthController extends Controller {
 
   async index() {
     const {ctx} = this
-    
+    // let wechatRes = await ctx.model.Admin.findAll({include: [{model: ctx.model.Role}]})
+    // let wechatRes = await ctx.model.Wechat.findAll({include: [{ model: ctx.model.Union}]})
+    // let wechatRes = await ctx.model.Union.findAll({include: [{model: ctx.model.User}]})
+    // let wechatRes = await ctx.model.Union.findAll({include: [{ model: ctx.model.User}]})
+    let wechatRes = await ctx.model.Union.findOne({ include: [{model: ctx.model.Wechat, where: {openid: 'o5YPb0faazTBCFOzf6weDBD-ZM8U'}}]})
+    ctx.body = wechatRes
   }
 };
 

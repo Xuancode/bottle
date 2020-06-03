@@ -33,7 +33,7 @@ class WebAuthService extends Service {
     let tempObj = {session_key, refresh_token, access_token, is_focus, type}
     tempObj = ctx.helper.fliterUndefinedParams(tempObj)
     console.log(tempObj)
-    let wechatRes = await ctx.model.Wechat.findOne({where: {openid}}) // 此处仍会报不知user_id， model已经删除该属性了不知为何，只能筛选属性
+    let wechatRes = await ctx.model.Wechat.findOne({where: {openid}})
     console.log('没走出这步')
     // , attributes: ['openid']
     let user = null
@@ -41,6 +41,8 @@ class WebAuthService extends Service {
     // 事务开始
     const Op = this.app.Sequelize.Op
     let transaction = null
+    let unionRes = null
+    let userRes = null
     try {
       transaction = await this.ctx.model.transaction()
       // 已存在，更新wecaht表, 不存在则新建
@@ -54,29 +56,21 @@ class WebAuthService extends Service {
       // 不存在union则新建
       console.log('准备创建unionRes')
       // console.log(ctx.model)
-      let unionRes = await ctx.model.Union.findOne({include: [{model: ctx.model.Wechat, attributes: ['id']}], attributes: ['unionid']}, { transaction })
+      unionRes = await ctx.model.Union.findOne({ where: {unionid}}, { transaction })
 
       console.log('准备创建unionRes没走出来？')
+      console.log(unionRes)
 
-
+      // 按照设计，有union一定关联了user；没有union还要新建user并且关联
       if (!unionRes) {
         unionRes = await ctx.model.Union.create({openid, unionid}, { transaction })
+        console.log('名字', ctx.service.user.createNickName())
+        userRes = await ctx.model.User.create({name: ctx.service.user.createNickName(), user_id: ctx.service.user.createUid()}, { transaction })
+        await unionRes.setUsers([userRes], {transaction})
+        // 关联user
       }
-
-
-
-
-
-      console.log('准备创建userRes')
-      let userRes = await ctx.model.User.findOrCreate({
-        where: {unionid: unionRes.unionid}, 
-        defaults: {user_id: ctx.service.user.createUid()}
-      },{ transaction })
-      // 创建/覆盖两个关联表的关联关系
-      console.log('准备创建Wechat关系')
-      await ctx.model.Union.setWechats([wechatRes], {transaction})
-      console.log('准备创建user关系')
-      await ctx.model.Union.setUsers([userRes], {transaction})
+      // union关联wechat
+      await unionRes.setWechats([wechatRes], {transaction})
 
       await transaction.commit()
       ctx.body = {...this.app.resCode['SUCCESS'], msg: '新建成功'}

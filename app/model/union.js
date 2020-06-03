@@ -14,8 +14,9 @@ module.exports = app => {
   });
 
   Union.associate = function() {
-    app.model.Union.belongsTo(app.model.User, { through: 'user_union', foreignKey: 'unionid' })
-    app.model.Union.belongsToMany(app.model.Wechat, { through: 'wechat_union', foreignKey: 'unionid' })
+    app.model.Union.belongsToMany(app.model.User, { through: app.model.UserUnion, foreignKey: 'unionid' }),
+    // app.model.Union.belongsToMany(app.model.Wechat, { through: app.model.WechatUnion, foreignKey: 'unionid' }) // 成功的版本
+    app.model.Union.belongsToMany(app.model.Wechat, { through: app.model.WechatUnion, foreignKey: 'unionid' })
   }
   return Union
 }

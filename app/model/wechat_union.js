@@ -13,7 +13,7 @@ module.exports = app => {
     openid:{
       type: STRING(100),
       allowNull: false,
-      unique: true,
+      // unique: true,
       onDelete: "CASCADE"
     },
     created_at: DATE,
