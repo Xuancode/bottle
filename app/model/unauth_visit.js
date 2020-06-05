@@ -7,13 +7,12 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     unionid: {
       type: STRING(100),
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "union",
         key: "unionid"
       },
       onUpdate: "CASCADE",
-      onDelete: "CASCADE"
     },
     // 应用项目, 瓶子小程序： 110, 万事通订阅号： 210, 生活服务号： 310
     type: {

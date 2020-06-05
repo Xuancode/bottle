@@ -5,16 +5,18 @@ module.exports = app => {
 
   const Wechat_union = app.model.define('wechat_union', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    unionid: {
+    union_id: {
       type: STRING(100),
       allowNull: false,
-      onDelete: "CASCADE"
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     },
-    openid:{
+    wechat_id:{
       type: STRING(100),
       allowNull: false,
-      // unique: true,
-      onDelete: "CASCADE"
+      unique: true,
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE"
     },
     created_at: DATE,
     updated_at: DATE

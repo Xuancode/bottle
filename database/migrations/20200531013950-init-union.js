@@ -8,7 +8,8 @@ module.exports = {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
       unionid: {
         type: STRING(100),
-        allowNull: false
+        allowNull: false,
+        unique: true
       },
       created_at: DATE,
       updated_at: DATE

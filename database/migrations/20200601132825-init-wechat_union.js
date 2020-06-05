@@ -6,16 +6,18 @@ module.exports = {
     const { INTEGER, DATE, STRING } = Sequelize;
     await queryInterface.createTable('wechat_union', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      unionid: {
+      union_id: {
         type: STRING(100),
         allowNull: false,
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
       },
-      openid:{
+      wechat_id:{
         type: STRING(100),
         allowNull: false,
         unique: true,
-        onDelete: "CASCADE"
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
       },
       created_at: DATE,
       updated_at: DATE

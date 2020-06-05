@@ -39,7 +39,7 @@ module.exports = app => {
   })
 
   Wechat.associate = function() {
-    app.model.Wechat.belongsToMany(app.model.Union, { through: app.model.WechatUnion, foreignKey: 'openid' })
+    app.model.Wechat.belongsToMany(app.model.Union, { through: app.model.WechatUnion, foreignKey: 'wechat_id' })
     // app.model.Admin.belongsToMany(app.model.Item, {through: 'admin_item', foreignKey: 'admin_id' })
   }
   return Wechat

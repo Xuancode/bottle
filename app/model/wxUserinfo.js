@@ -15,8 +15,14 @@ module.exports = app => {
     privilege: STRING(100),
     unionid: {
       type: STRING(100),
+      unique: true,
       allowNull: true,
-      unique: true
+      references: {
+        model: "union",
+        key: "unionid"
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE"
     },
     created_at: DATE,
     updated_at: DATE

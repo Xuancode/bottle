@@ -9,13 +9,13 @@ const Controller = require('egg').Controller
 
 class weChatReplyController extends Controller {
   async create() {
-    const {ctx} = this
+    const { ctx } = this
     var jsonObj = Parser.parse(ctx.request.body)
 
     const wxConfig = {
       // 传入配置信息
-      token: ctx.app.config.weChat['210'].token,
-      appid: ctx.app.config.weChat['210'].appid,
+      token: ctx.app.config.weChat[ctx.query.project].token,
+      appid: ctx.app.config.weChat[ctx.query.project].appid,
       msg_signature: 'xxx', // 微信发来的签名，后边补上验证
       encodingAESKey: ctx.app.config.weChat['210'].aesKey
     }
@@ -26,9 +26,9 @@ class weChatReplyController extends Controller {
     let replyText = ''
     console.log(msgJS)
     if (!msgJS || !msgJS.xml) {
-      ctx.body="you bad!"
+      ctx.body = "you bad!"
       return
-    } 
+    }
     if (msgJS.xml.MsgType === 'event') {
       if (msgJS.xml.Event === 'unsubscribe') {
         // 存取消关注
@@ -44,7 +44,7 @@ class weChatReplyController extends Controller {
     } else if (msgJS.xml.MsgType === 'text') {
       // 转到文字处理自动回复
       replyText = '你好，我回复你了哦新的'
-    } 
+    }
 
     // 回复信息
     ctx.logger.info('传来的: %j', msgJS)
@@ -60,7 +60,7 @@ class weChatReplyController extends Controller {
     let builder = new JSON2XML()
     replyMsg = builder.parse(replyMsg)
     replyMsg = wxCrypt.encrypt(replyMsg)
-    
+
     // 生成 MsgSignature
     let Arr = [ctx.app.config.weChat['210'].token, ctx.query.timestamp, ctx.query.nonce, replyMsg] // 密文
     Arr.sort()
@@ -84,7 +84,7 @@ class weChatReplyController extends Controller {
 
   async index() {
     const { ctx } = this
-    const {signature, timestamp, nonce, echostr} = ctx.query
+    const { signature, timestamp, nonce, echostr } = ctx.query
     ctx.logger.info('request_query: %j', ctx.query)
 
     const token = ctx.app.config.weChat['210'].token
@@ -94,9 +94,9 @@ class weChatReplyController extends Controller {
     let mysignature = sha1(str)
 
     if (mysignature == signature) {
-        ctx.body = echostr
+      ctx.body = echostr
     } else {
-        ctx.body = '错误'
+      ctx.body = '错误'
     }
   }
 }

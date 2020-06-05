@@ -18,6 +18,12 @@ module.exports = {
         type: STRING(100),
         unique: true,
         allowNull: true,
+        references: {
+          model: "union",
+          key: "unionid"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       created_at: DATE,
       updated_at: DATE
