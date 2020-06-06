@@ -8,7 +8,8 @@ class WeChatService extends Service {
   async setFocus(openid, type, status) {
     const { ctx } = this
     let data = { is_focus: status, type }
-    const wxUser = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${this.config.weChat['type']}&openid=${openid}&lang=zh_CN`, {
+    const access_token = ctx.app.Cache.get(type)
+    const wxUser = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`, {
       dataType: 'json',
       method: 'GET'
     })

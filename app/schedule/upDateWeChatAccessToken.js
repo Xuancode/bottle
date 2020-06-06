@@ -21,7 +21,7 @@ class UpDateWeChatAccessToken extends Subscription {
           dataType: 'json',
           method: 'GET'
         }).then(res => {
-          this.ctx.logger.info(res)
+          // this.ctx.logger.info(res)
           if (res && res.data && res.data.access_token) {
             this.ctx.app.Cache.set(key, res.data.access_token, 60 * 60 * 2) // 官方2小时有效
           }
