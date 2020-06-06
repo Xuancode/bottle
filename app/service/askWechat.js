@@ -1,4 +1,5 @@
 const Service = require('egg').Service
+const askWechat = require('../util/askWechat')
 
 function toInt(str) {
   if (typeof str === 'number') return str;
@@ -22,9 +23,11 @@ class AskWechatService extends Service {
     if (!wxUser || !wxUser[0]) {
       return false
     }
-    const result = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${wxUser[0].openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
-    ctx.logger.info(result.data)
-    if (result.errcode || !result.data.subscribe) {
+    const result = await askWechat.getUserInfo(this, type, wxUser[0].openid)
+    // const result = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${wxUser[0].openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
+    ctx.logger.info('result.data: %j', result)
+
+    if (!result.subscribe) {
       return false
     } else {
       return result

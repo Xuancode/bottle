@@ -1,4 +1,6 @@
-const Service = require('egg').Service;
+const Service = require('egg').Service
+const askWechat = require('../util/askWechat')
+
 class WeChatService extends Service {
   /**
    * 设置关注、取消关注状态，该表状态不严格准确，严格准确还需要询问微信服务器
@@ -8,14 +10,15 @@ class WeChatService extends Service {
   async setFocus(openid, type, status) {
     const { ctx } = this
     let data = { is_focus: status, type }
-    const access_token = ctx.app.Cache.get(type)
-    const wxUser = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`, {
-      dataType: 'json',
-      method: 'GET'
-    })
+    // const access_token = ctx.app.Cache.get(type)
+    const wxUser = await askWechat.getUserInfo(this, type, openid)
+    // const wxUser = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`, {
+    //   dataType: 'json',
+    //   method: 'GET'
+    // })
     ctx.logger.info('传来的wxUser: %j', wxUser)
-    if (wxUser && wxUser.data && wxUser.data.unionid) {
-      data.unionid = wxUser.data.unionid
+    if (wxUser.unionid) {
+      data.unionid = wxUser.unionid
     }
 
     const userAndUnion = await ctx.service.webAuth.creatOrUpdateWechatByHasUnionid(openid, data)
