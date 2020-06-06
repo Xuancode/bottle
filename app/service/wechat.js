@@ -12,8 +12,9 @@ class WeChatService extends Service {
       dataType: 'json',
       method: 'GET'
     })
-    if (wxUser && wxUser.unionid) {
-      data.unionid = unionid
+    console.log(wxUser)
+    if (wxUser && wxUser.data && wxUser.data.unionid) {
+      data.unionid = wxUser.data.unionid
     }
 
     const userAndUnion = await ctx.service.webAuth.creatOrUpdateWechatByHasUnionid(openid, data)
