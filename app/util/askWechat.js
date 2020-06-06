@@ -1,12 +1,20 @@
 module.exports = {
+  /**
+   * 
+   * @param {object} that this
+   * @param {string} type app类型
+   * @param {string} openid app的openid
+   */
   async getUserInfo(that, type, openid) {
     const { ctx } = that
     let result = await ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
+    ctx.logger.info('第一次获取: %j', result.data)
     if (!result.errcode) {
       return result.data
     } else if (result.errcode == 40001) {
       await getAccessTokenByAppType(that, type)
       result = await ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
+      ctx.logger.info('第二次获取: %j', result.data)
       if (!result.errcode) {
         return result.data
       } else {
@@ -20,6 +28,11 @@ module.exports = {
       throw new Error(res.errcode + res.errmsg)
     }
   },
+  /**
+   * 
+   * @param {object} that this
+   * @param {string} type app类型，110，210，310等
+   */
   async getAccessTokenByAppType(that, type) {
     const { ctx } = that
     const ele = that.config.weChat[type]
@@ -28,6 +41,7 @@ module.exports = {
       method: 'GET'
     })
     if (res && res.data && res.data.access_token) {
+      console.log(ctx.app.Cache.get(210))
       ctx.app.Cache.set(type, res.data.access_token, 60 * 60) // 官方2小时有效，这里缩短为1小时
     } else {
       ctx.logger.info('res.errcode: %j', res.errcode)

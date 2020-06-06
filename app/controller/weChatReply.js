@@ -24,30 +24,18 @@ class weChatReplyController extends Controller {
     const xml = wxCrypt.decrypt(jsonObj.xml.Encrypt)
     let msgJS = Parser.parse(xml) // 获得obj数据
     let replyText = ''
-    console.log(msgJS)
+
     if (!msgJS || !msgJS.xml) {
       ctx.body = "you bad!"
       return
     }
-    ctx.logger.info('from的openid: %j', msgJS.xml.FromUserName)
-    ctx.logger.info('query的openid: %j', ctx.query.openid)
     if (msgJS.xml.MsgType === 'event') {
-      if (msgJS.xml.Event === 'unsubscribe') {
-        // 存取消关注
-        await ctx.service.wechat.setUnFocus(msgJS.xml.FromUserName, ctx.query.project, 0)
-        ctx.body = '' // 无特殊处理微信接受空字符串；否则未收到回复会在5s后重试，最多三次重试
-        return
-      } else if (msgJS.xml.Event === 'subscribe') {
-        // 存关注
-        await ctx.service.wechat.setFocus(msgJS.xml.FromUserName, ctx.query.project, 1)
-        ctx.body = ''
-        return
-      }
+      replyText = await ctx.service.weChatReply.eventType(msgJS.xml)
     } else if (msgJS.xml.MsgType === 'text') {
       // 转到文字处理自动回复
-      replyText = '您好，感谢关注，目前部分服务功能正在升级维护中，请谅解'
+      replyText = '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
     }
-
+    ctx.logger.info('replyText: %j', replyText)
     // 回复信息
     ctx.logger.info('传来的: %j', msgJS)
     let replyMsg = {

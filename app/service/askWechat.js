@@ -19,14 +19,14 @@ class AskWechatService extends Service {
     } catch (error) {
       throw new Error(error)
     }
+    console.log(wxUser)
     // const wxUser = await ctx.model.Wechat.findOne({where: {user_id: uid, type: type, is_focus: 1}})
     if (!wxUser || !wxUser[0]) {
       return false
     }
     const result = await askWechat.getUserInfo(this, type, wxUser[0].openid)
-    // const result = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${wxUser[0].openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
     ctx.logger.info('result.data: %j', result)
-
+    console.log(result)
     if (!result.subscribe) {
       return false
     } else {
