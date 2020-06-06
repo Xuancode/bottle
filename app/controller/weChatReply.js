@@ -32,18 +32,18 @@ class weChatReplyController extends Controller {
     if (msgJS.xml.MsgType === 'event') {
       if (msgJS.xml.Event === 'unsubscribe') {
         // 存取消关注
-        await ctx.service.wechat.setFocus(msgJS.xml.FromUserName, ctx.query.project, 0)
+        await ctx.service.wechat.setUnFocus(msgJS.xml.FromUserName, ctx.query.project, 0)
         ctx.body = '' // 无特殊处理微信接受空字符串；否则未收到回复会在5s后重试，最多三次重试
         return
       } else if (msgJS.xml.Event === 'subscribe') {
         // 存关注
-        await ctx.service.wechat.setUnFocus(msgJS.xml.FromUserName, ctx.query.project, 1)
+        await ctx.service.wechat.setFocus(msgJS.xml.FromUserName, ctx.query.project, 1)
         ctx.body = ''
         return
       }
     } else if (msgJS.xml.MsgType === 'text') {
       // 转到文字处理自动回复
-      replyText = '你好，我回复你了哦新的'
+      replyText = '您好，感谢关注，目前部分服务功能正在升级维护中，请谅解'
     }
 
     // 回复信息

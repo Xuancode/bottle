@@ -15,8 +15,15 @@ class WeChatService extends Service {
     if (wxUser && wxUser.unionid) {
       data.unionid = unionid
     }
-    const resUser = await ctx.service.wechat.creatOrUpdateWechatByUidAndType(openid, type, data)
-    return resUser
+
+    const userAndUnion = await ctx.service.webAuth.creatOrUpdateWechatByHasUnionid(openid, data)
+    // const resUser = await ctx.service.wechat.creatOrUpdateWechatByUidAndType(openid, type, data)
+    return userAndUnion
+  }
+
+  async setUnFocus(openid, type, status) {
+    const { ctx } = this
+    await ctx.model.Wechat.findOrcreate({ where: { openid }, defaults: { openid, type, is_focus: status } })
   }
 
   /** 返回成功或失败的布尔值 */
