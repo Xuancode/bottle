@@ -19,6 +19,8 @@ class weChatReplyService extends Service {
           return '为更好地为您服务，请将您的资源或需求发送至横县万事通公众号，谢谢！'
         } else if (xmlMsg.EventKey == 'V1002_BUSINESS') {
           return '为更好地为您服务，请将您的资源或需求发送至横县万事通公众号，谢谢！'
+        } else if (xmlMsg.EventKey == 'V2001_CONTACT_US') {
+          return '商务合作请联系：15007816216.'
         }
         return ''
       case 'unsubscribe':
