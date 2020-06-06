@@ -23,7 +23,7 @@ class AskWechatService extends Service {
       return false
     }
     const result = await this.ctx.curl(`https://api.weixin.qq.com/cgi-bin/user/info?access_token=${ctx.app.Cache.get(type)}&openid=${wxUser[0].openid}&lang=zh_CN`, { method: 'GET', dataType: 'json' })
-    if (result.errcode) {
+    if (result.errcode || !result.data.subscribe) {
       return false
     } else {
       return result
