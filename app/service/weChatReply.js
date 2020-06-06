@@ -15,9 +15,9 @@ class weChatReplyService extends Service {
     const { ctx } = this
     switch (xmlMsg.Event) {
       case 'CLICK':
-        if (xmlMsg.EventKey == V1001_JOB) {
+        if (xmlMsg.EventKey == 'V1001_JOB') {
           return '为更好地为您服务，请将您的资源或需求发送至横县万事通公众号，谢谢！'
-        } else if (xmlMsg.EventKey == V1002_BUSINESS) {
+        } else if (xmlMsg.EventKey == 'V1002_BUSINESS') {
           return '为更好地为您服务，请将您的资源或需求发送至横县万事通公众号，谢谢！'
         }
         return ''
