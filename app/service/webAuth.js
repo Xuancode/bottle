@@ -33,7 +33,6 @@ class WebAuthService extends Service {
     let tempObj = { session_key, refresh_token, access_token, is_focus, type }
     tempObj = ctx.helper.fliterUndefinedParams(tempObj)
     let wechatRes = await ctx.model.Wechat.findOne({ where: { openid } })
-    let user = null
 
     // 事务开始
     let transaction = null
@@ -51,17 +50,17 @@ class WebAuthService extends Service {
       unionRes = await ctx.model.Union.findOne({ where: { unionid } }, { transaction })
       // 按照设计，有union一定关联了user；没有union还要新建user并且关联
       if (!unionRes) {
-        unionRes = await ctx.model.Union.create({ openid, unionid }, { transaction })
+        unionRes = await ctx.model.Union.create({ unionid }, { transaction })
         userRes = await ctx.model.User.create({ name: ctx.service.user.createNickName(), user_id: ctx.service.user.createUid() }, { transaction })
         await unionRes.setUsers([userRes], { transaction })
         // union关联wechat
-        await unionRes.setWechats([wechatRes], { transaction })
+        await unionRes.addWechat(wechatRes, { transaction })
         // 关联user
       } else {
         // 判断wechat和union是否关联，若没有则关联
         let linkWechat = await unionRes.getWechats({ where: { openid } }, { transaction })
         if (!(linkWechat && linkWechat.length > 0)) {
-          await unionRes.setWechats([wechatRes], { transaction })
+          await unionRes.addWechat(wechatRes, { transaction })
         }
         userRes = await unionRes.getUsers({ transaction })
         userRes = userRes[0]

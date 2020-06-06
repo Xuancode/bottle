@@ -29,6 +29,8 @@ class weChatReplyController extends Controller {
       ctx.body = "you bad!"
       return
     }
+    ctx.logger.info('from的openid: %j', msgJS.xml.FromUserName)
+    ctx.logger.info('query的openid: %j', ctx.query.openid)
     if (msgJS.xml.MsgType === 'event') {
       if (msgJS.xml.Event === 'unsubscribe') {
         // 存取消关注
