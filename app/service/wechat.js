@@ -23,7 +23,7 @@ class WeChatService extends Service {
 
   async setUnFocus(openid, type, status) {
     const { ctx } = this
-    await ctx.model.Wechat.findOrcreate({ where: { openid }, defaults: { openid, type, is_focus: status } })
+    await ctx.model.Wechat.findOrCreate({ where: { openid }, defaults: { openid, type, is_focus: status } })
   }
 
   /** 返回成功或失败的布尔值 */
