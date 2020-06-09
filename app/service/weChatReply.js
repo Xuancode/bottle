@@ -40,9 +40,9 @@ class weChatReplyService extends Service {
     if (xmlMsg.Content == '测试链接回复') {
       return '<a href="weixin://bizmsgmenu?msgmenucontent=测试自动发送&msgmenuid=1">点击</a>'
     }
-    const resReply = await ctx.model.Reply.findOne({ where: { quetion: xmlMsg.Content } })
+    const resReply = await ctx.model.Reply.findOne({ where: { question: xmlMsg.Content } })
     if (resReply) {
-      return resReply.quetion
+      return resReply.question
     } else {
       return '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
     }
