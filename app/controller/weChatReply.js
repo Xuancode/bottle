@@ -1,3 +1,19 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-03-30 17:07:34
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-09 17:58:12
+ * @Description: file content
+ * @FilePath: /bottle/app/controller/weChatReply.js
+ */
+/*
+ * @Author: xuanpl
+ * @Date: 2020-03-30 17:07:34
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-09 17:57:19
+ * @Description: 微信回调接口
+ * @FilePath: /bottle/app/controller/weChatReply.js
+ */
 'use strict'
 
 const sha1 = require('js-sha1')
@@ -33,7 +49,7 @@ class weChatReplyController extends Controller {
       replyText = await ctx.service.weChatReply.eventType(msgJS.xml)
     } else if (msgJS.xml.MsgType === 'text') {
       // 转到文字处理自动回复
-      replyText = '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
+      replyText = await ctx.service.weChatReply.getReplyText(msgJS.xml)
     }
     ctx.logger.info('replyText: %j', replyText)
     // 回复信息

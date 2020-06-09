@@ -35,37 +35,18 @@ class weChatReplyService extends Service {
         return ''
     }
   }
-  async getMovie(page, size, name, obj, sort) {
-    page = toInt(page)
-    size = toInt(size)
-    let ctx = this.ctx
-    const Op = this.app.Sequelize.Op
-    // let sql = name ? { ...obj, name: { [Op.like]:'%' + name + '%'} } : {...obj}
-    let nameSql = name ? { name: { [Op.like]: '%' + name + '%' } } : {}
-    let objSql = obj ? { ...obj } : {}
-    let sql = { ...nameSql, ...objSql }
-    let order = sort.split(',')
-
-    const resData = await ctx.model.Movie.findAndCountAll({
-      where: sql,
-      attributes: ['id', 'name', 'link', 'pass_code', 'is_delete', 'hot', 'state', 'introduction', 'created_at', 'updated_at'],
-      // attributes: ['id', 'name'],
-      include: { model: ctx.model.Admin, attributes: ['name', 'user_name'] },
-      order: [order],
-      limit: size,
-      offset: size * (page - 1)
-    })
-
-    // console.log(resData.rows[0].movie)
-    let pagination = {
-      total: resData.count,
-      count: resData.rows.length,
-      size: size,
-      page: page,
-      total_pages: parseInt((resData.count + size - 1) / size)
+  async getReplyText(xmlMsg) {
+    const { ctx } = this
+    if (xmlMsg.Content == '测试链接回复') {
+      return '<a href="weixin://bizmsgmenu?msgmenucontent=测试自动发送&msgmenuid=1">点击</a>'
+    }
+    const resReply = await ctx.model.Reply.findOne({ where: { quetion: xmlMsg.Content } })
+    if (resReply) {
+      return resReply.quetion
+    } else {
+      return '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
     }
 
-    return { data: resData.rows, meta: { pagination: pagination } }
   }
 
 }

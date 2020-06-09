@@ -11,7 +11,7 @@ module.exports = app => {
       unique: true,
     },
     item_id: {
-      type: BIGINT(15), 
+      type: BIGINT(15),
       allowNull: true,
       unique: true,
     },
@@ -43,8 +43,9 @@ module.exports = app => {
     updated_at: DATE,
   })
 
-  Item.associate = function() {
+  Item.associate = function () {
     app.model.Item.belongsToMany(app.model.Admin, { as: 'items', through: 'admin_item', foreignKey: 'item_id' })
+    app.model.Item.hasMany(app.model.Reply, { foreignKey: 'item_id' })
   }
 
   return Item;

@@ -35,10 +35,10 @@ module.exports = app => {
 
   // 获取bottle相关
   router.resources('/api/v1/bottle', app.controller.bottle);
-  
+
   /**有心影视 公众号 */
   // token
-  router.resources('/api/v1/weChatReply', app.controller.weChatReply)
+
   router.resources('/api/v1/youxin/movie', app.controller.youxinMovie)
   router.post('/api/v1/youxin/uploadExcle', app.controller.youxinMovie.uploadExcle)
   router.get('/api/v1/youxin/movie/checkName', app.controller.youxinMovie.checkName)
@@ -50,13 +50,15 @@ module.exports = app => {
   /**
    * 公众号相关
    */
-  // 询问微信相关的信息
   // router.resources('/api/v1/askWechat', app.controller.askWechat)
+  router.resources('/api/v1/weChatReply', app.controller.weChatReply) // 微信回调入口
   router.resources('/api/v1/room', app.controller.room.room)
   router.get('/api/v1/room/canSee', app.controller.room.room.canSee)
   // 自动回复
   router.resources('/api/v1/weChat/reply', app.controller.weChat.autoReply)
-  
+  router.get('/api/v1/weChat/reply/checkName', app.controller.weChat.autoReply.checkName)
+  router.post('/api/v1/weChat/reply/uploadExcle', app.controller.weChat.autoReply.uploadExcle)
+
 
   // 评论相关
   // router.resources('/api/v1/comment', app.controller.comment);

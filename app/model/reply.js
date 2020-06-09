@@ -47,9 +47,9 @@ module.exports = app => {
     updated_at: DATE,
   })
 
-  Reply.associate = function() {
-    app.model.Reply.belongsTo(app.model.Admin, {foreignKey: 'admin_id' , targetKey: 'admin_id'})
-    app.model.Reply.belongsTo(app.model.Item, {foreignKey: 'item_id' , targetKey: 'item_id'})
+  Reply.associate = function () {
+    app.model.Reply.belongsTo(app.model.Admin, { foreignKey: 'admin_id', targetKey: 'admin_id' })
+    app.model.Reply.belongsTo(app.model.Item, { foreignKey: 'item_id', targetKey: 'item_id' })
   }
 
   return Reply;
