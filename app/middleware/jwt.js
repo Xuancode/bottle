@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-02-18 11:40:47
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-11 18:05:35
+ * @LastEditTime: 2020-06-11 18:12:07
  * @Description: jwt中间件
  * @FilePath: /bottle/app/middleware/jwt.js
  */
@@ -19,7 +19,9 @@ module.exports = options => {
     } else {
       try {
         const verifyData = await ctx.helper.resolveToken(token)
+        ctx.logger.info('TokenBlacklist前面: %j', verifyData)
         const blackToken = await ctx.model.TokenBlacklist.findOne({ where: { token: token } })
+        ctx.logger.info('TokenBlacklist后面: %j', verifyData)
         if (verifyData.uid && !blackToken) {
           // 注意，还需要补验证
           ctx.uid = verifyData.uid
@@ -30,6 +32,7 @@ module.exports = options => {
         }
       } catch (e) {
         console.log('错误', e);
+        ctx.logger.info('jwt的错误是: %j', e)
         ctx.body = { msg: '错误', code: '50000' }
       }
     }
