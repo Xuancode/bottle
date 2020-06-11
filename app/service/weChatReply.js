@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-06-06 16:33:54
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-11 18:44:10
+ * @LastEditTime: 2020-06-11 19:05:12
  * @Description: file content
  * @FilePath: /bottle/app/service/weChatReply.js
  */
@@ -48,7 +48,7 @@ class weChatReplyService extends Service {
     if (xmlMsg.Content == '测试链接回复') {
       return '<a href="weixin://bizmsgmenu?msgmenucontent=测试自动发送&msgmenuid=1">点击</a>'
     }
-    const resReply = await ctx.model.Reply.findOne({ where: { question: xmlMsg.Content } })
+    const resReply = await ctx.model.Reply.findOne({ where: { question: xmlMsg.Content, state: '启用' } })
     if (resReply) {
       return resReply.content
     } else {
