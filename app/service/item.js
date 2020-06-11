@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-05-12 20:47:41
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-11 18:36:28
+ * @LastEditTime: 2020-06-11 18:39:49
  * @Description: file content
  * @FilePath: /bottle/app/service/item.js
  */
@@ -33,7 +33,8 @@ class ItemService extends Service {
         where: whereSql[0],
         order: [['created_at']],
         limit: size,
-        // distinct: true, // 重要！加该选项避免查出错误的count值
+        // 重要！加该选项避免查出错误的count值;但是正式环境的语句是 SELECT count(DISTINCT(*)) AS `count` FROM `item` AS `item` WHERE `item`.`is_delete` = 0; 导致出错；测试环境为SELECT count(DISTINCT(`id`)) AS `count` FROM `item` AS `item` WHERE `item`.`is_delete` = 0; 不会出错，无解，先关掉
+        // distinct: true, 
         offset: size * (page - 1)
       })
 

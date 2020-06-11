@@ -1,3 +1,11 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-06-06 16:33:54
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-11 18:44:10
+ * @Description: file content
+ * @FilePath: /bottle/app/service/weChatReply.js
+ */
 const Service = require('egg').Service
 
 function toInt(str) {
@@ -42,7 +50,7 @@ class weChatReplyService extends Service {
     }
     const resReply = await ctx.model.Reply.findOne({ where: { question: xmlMsg.Content } })
     if (resReply) {
-      return resReply.question
+      return resReply.content
     } else {
       return '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
     }
