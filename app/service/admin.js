@@ -1,3 +1,11 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-03-31 15:20:00
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-11 16:57:32
+ * @Description: file content
+ * @FilePath: /bottle/app/service/admin.js
+ */ 
 const Service = require('egg').Service;
 function toInt(str) {
   if (typeof str === 'number') return str
@@ -23,13 +31,13 @@ class AdminService extends Service {
       if (item_id && item_id.length != 0) {
         const items = await ctx.model.Item.findAll({ where: { item_id: { [Op.in]: item_id } }, transaction })
         await admin.setItems(items, { transaction: transaction })
-      }      
+      }
 
       await transaction.commit()
       return admin
     } catch (error) {
       await transaction.rollback()
-      return {msg: '新建失败'}
+      return { msg: '新建失败' }
     }
   }
   async getAdmin(page, size) {
@@ -134,7 +142,7 @@ class AdminService extends Service {
     let transaction = null
     try {
       transaction = await this.ctx.model.transaction()
-      await admin.save({transaction})
+      await admin.save({ transaction })
       // 修改admin_role联系
       const roles = await ctx.model.Role.findAll({ where: { id: { [Op.in]: role_id } }, transaction })
       await admin.setRoles(roles, { transaction })
@@ -146,7 +154,7 @@ class AdminService extends Service {
       return admin
     } catch (error) {
       await transaction.rollback()
-      return {msg: '修改失败'}
+      return { msg: '修改失败' }
     }
   }
 
