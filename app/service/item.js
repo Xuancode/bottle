@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-05-12 20:47:41
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-11 17:47:36
+ * @LastEditTime: 2020-06-11 18:36:28
  * @Description: file content
  * @FilePath: /bottle/app/service/item.js
  */
@@ -33,7 +33,7 @@ class ItemService extends Service {
         where: whereSql[0],
         order: [['created_at']],
         limit: size,
-        distinct: true, // 重要！加该选项避免查出错误的count值
+        // distinct: true, // 重要！加该选项避免查出错误的count值
         offset: size * (page - 1)
       })
 
