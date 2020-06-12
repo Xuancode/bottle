@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-06-06 16:33:54
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-12 17:24:22
+ * @LastEditTime: 2020-06-12 18:23:15
  * @Description: file content
  * @FilePath: /bottle/app/service/weChatReply.js
  */
@@ -56,6 +56,8 @@ class weChatReplyService extends Service {
     const resReply = await ctx.model.Reply.findOne({ where: { question: content, state: '启用' } })
     if (resReply) {
       let content = this.testContent2List(resReply.content)
+      resReply.hot = resReply.hot + 1
+      resReply.save()
       return content
     } else {
       // 模糊匹配返回问题列表
