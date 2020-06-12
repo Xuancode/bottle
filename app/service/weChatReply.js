@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-06-06 16:33:54
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-11 19:05:12
+ * @LastEditTime: 2020-06-12 15:00:56
  * @Description: file content
  * @FilePath: /bottle/app/service/weChatReply.js
  */
@@ -43,18 +43,22 @@ class weChatReplyService extends Service {
         return ''
     }
   }
-  async getReplyText(xmlMsg) {
+  async getReplyText(content) {
     const { ctx } = this
-    if (xmlMsg.Content == '测试链接回复') {
-      return '<a href="weixin://bizmsgmenu?msgmenucontent=测试自动发送&msgmenuid=1">点击</a>'
-    }
-    const resReply = await ctx.model.Reply.findOne({ where: { question: xmlMsg.Content, state: '启用' } })
+    const resReply = await ctx.model.Reply.findOne({ where: { question: content, state: '启用' } })
     if (resReply) {
       return resReply.content
     } else {
-      return '您好，部分服务功能正在升级中，敬请期待横县万事通为您展现互联网+智能生态圈'
+      const Op = this.app.Sequelize.Op
+      const resReplys = await ctx.model.Reply.findAll({ where: { question: { [Op.like]: '%' + content + '%' }, state: '启用' } })
+      let temp = '为您找到以下相关内容：\n'
+      for (let i = 0; i < resReplys.length; i++) {
+        let content = resReplys[i].content
+        content = `${i + 1}、<a href="weixin://bizmsgmenu?msgmenucontent=${content}&msgmenuid=${i + 1}">${content}</a>\n`
+        temp = temp + content
+      }
+      return temp
     }
-
   }
 
 }

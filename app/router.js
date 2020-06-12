@@ -1,3 +1,11 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-02-18 11:40:47
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-12 14:42:47
+ * @Description: file content
+ * @FilePath: /bottle/app/router.js
+ */ 
 'use strict';
 
 /**
@@ -44,7 +52,7 @@ module.exports = app => {
   router.get('/api/v1/youxin/movie/checkName', app.controller.youxinMovie.checkName)
 
   // 临时的
-  router.resources('/api/v1/youxin/temp', app.controller.temp)
+  router.resources('/api/v1/temp', app.controller.temp)
   // router.get('/api/v1/youxin/temp/user_info', app.controller.temp.user_info)
 
   /**

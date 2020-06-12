@@ -49,7 +49,7 @@ class weChatReplyController extends Controller {
       replyText = await ctx.service.weChatReply.eventType(msgJS.xml)
     } else if (msgJS.xml.MsgType === 'text') {
       // 转到文字处理自动回复
-      replyText = await ctx.service.weChatReply.getReplyText(msgJS.xml)
+      replyText = await ctx.service.weChatReply.getReplyText(msgJS.xml.Content)
     }
     ctx.logger.info('replyText: %j', replyText)
     // 回复信息
