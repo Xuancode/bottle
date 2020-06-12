@@ -2,7 +2,7 @@
  * @Author: xuanpl
  * @Date: 2020-06-07 10:40:20
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-09 15:51:23
+ * @LastEditTime: 2020-06-12 18:31:45
  * @Description: 微信自动回复的路由
  * @FilePath: /bottle/app/controller/weChat/autoReply.js
  */
@@ -53,7 +53,7 @@ class autoReplyController extends Controller {
     const { ctx } = this
     const { question, content, hot, state, id } = ctx.request.body
 
-    let tempObj = { question, content, hot, state }
+    let tempObj = { question, content, hot, state, admin_id: ctx.id }
     let obj = ctx.helper.fliterUndefinedParams(tempObj)
 
     const res = await ctx.model.Reply.update(
