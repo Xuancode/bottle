@@ -2,10 +2,10 @@
  * @Author: xuanpl
  * @Date: 2020-02-18 11:40:47
  * @LastEditors: xuanpl
- * @LastEditTime: 2020-06-12 14:42:47
+ * @LastEditTime: 2020-06-13 16:40:22
  * @Description: file content
  * @FilePath: /bottle/app/router.js
- */ 
+ */
 'use strict';
 
 /**
@@ -60,19 +60,20 @@ module.exports = app => {
    */
   // router.resources('/api/v1/askWechat', app.controller.askWechat)
   router.resources('/api/v1/weChatReply', app.controller.weChatReply) // 微信回调入口
-  router.resources('/api/v1/room', app.controller.room.room)
   router.get('/api/v1/room/canSee', app.controller.room.room.canSee)
   // 自动回复
   router.resources('/api/v1/weChat/reply', app.controller.weChat.autoReply)
   router.get('/api/v1/weChat/reply/checkName', app.controller.weChat.autoReply.checkName)
   router.post('/api/v1/weChat/reply/uploadExcle', app.controller.weChat.autoReply.uploadExcle)
-
+  // 租房项目
+  router.resources('/api/v1/room', app.controller.room.room)
+  router.resources('/api/v1/building', app.controller.room.building)
 
   // 评论相关
   // router.resources('/api/v1/comment', app.controller.comment);
 
   // 上传图片
-  // router.resources('/api/v1/qiniu', app.controller.qiniu);
+  router.resources('/api/v1/qiniu', app.controller.qiniu);
 
 
 

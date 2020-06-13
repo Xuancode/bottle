@@ -1,3 +1,11 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-03-23 22:37:51
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-13 18:12:10
+ * @Description: file content
+ * @FilePath: /bottle/database/migrations/20200323143751-init-bottle.js
+ */
 'use strict';
 
 module.exports = {
@@ -12,22 +20,22 @@ module.exports = {
         type: TINYINT(1),
         defaultValue: false
       },
-      user_id: {
-        type: STRING(30), 
-        allowNull: false, 
+      wechat_id: {
+        type: INTEGER,
+        allowNull: false,
         references: {
-          model: "user",
-          key: "user_id"
+          model: "wechat",
+          key: "openid"
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
       created_at: DATE,
       updated_at: DATE
-      })
+    })
   },
   // 在执行数据库降级时调用的函数，删除 users 表
   down: async queryInterface => {
-    await queryInterface.dropTable('bottle');
+    await queryInterface.dropTable('bottle')
   },
 };
