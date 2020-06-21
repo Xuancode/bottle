@@ -1,3 +1,11 @@
+/*
+ * @Author: xuanpl
+ * @Date: 2020-06-16 19:38:28
+ * @LastEditors: xuanpl
+ * @LastEditTime: 2020-06-16 19:44:56
+ * @Description: file content
+ * @FilePath: /bottle/app/util/askWechat.js
+ */ 
 module.exports = {
   /**
    * 
@@ -41,7 +49,6 @@ module.exports = {
       method: 'GET'
     })
     if (res && res.data && res.data.access_token) {
-      console.log(ctx.app.Cache.get(210))
       ctx.app.Cache.set(type, res.data.access_token, 60 * 60) // 官方2小时有效，这里缩短为1小时
     } else {
       ctx.logger.info('res.errcode: %j', res.errcode)
